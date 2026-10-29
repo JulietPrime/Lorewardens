@@ -4,9 +4,17 @@ export type Strictness = "off" | "gentle" | "standard" | "strict";
 
 export type AgentFamily = "continuity" | "domain" | "language" | "narrative" | "optional";
 
-export type ContinuityAgentId = "canon-lore" | "character-consistency" | "timeline";
+export type ContinuityAgentId =
+  | "canon-lore"
+  | "character-consistency"
+  | "timeline"
+  | "grammar-mechanics"
+  | "vocabulary-repetition"
+  | "style-voice"
+  | "character-voice"
+  | "period-dialect";
 
-export type Category = "canon" | "character" | "timeline";
+export type Category = "canon" | "character" | "timeline" | "language" | "prose";
 
 export interface Span {
   file: string;

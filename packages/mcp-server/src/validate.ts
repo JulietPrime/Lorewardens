@@ -16,8 +16,17 @@ const REQUIRED_FIELDS = [
 
 const SEVERITIES = new Set(["info", "minor", "major", "critical"]);
 const MIN_STRICTNESS_LEVELS = new Set(["gentle", "standard", "strict"]);
-const AGENT_IDS = new Set(["canon-lore", "character-consistency", "timeline"]);
-const CATEGORIES = new Set(["canon", "character", "timeline"]);
+const AGENT_IDS = new Set([
+  "canon-lore",
+  "character-consistency",
+  "timeline",
+  "grammar-mechanics",
+  "vocabulary-repetition",
+  "style-voice",
+  "character-voice",
+  "period-dialect",
+]);
+const CATEGORIES = new Set(["canon", "character", "timeline", "language", "prose"]);
 
 export function validateFinding(finding: unknown): string[] {
   const problems: string[] = [];
