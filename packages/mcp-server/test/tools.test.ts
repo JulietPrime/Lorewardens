@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { createRegistry, makeFinding, type CanonStore, type CanonSnapshot } from "@lorewardens/core";
-import { STUB_AGENTS } from "@lorewardens/agents";
+import { CONTINUITY_AGENTS } from "@lorewardens/agents";
 import { buildTools, runAnalyzeTool, type AnalyzeToolResult } from "../src/tools.js";
 import { defaultFixturesDir, loadFixtures } from "../src/store.js";
 
@@ -24,7 +24,7 @@ const CHUNK = {
 
 test("one tool per registered agent plus read-only canon_list", () => {
   const { store } = seededStore();
-  const registry = createRegistry(STUB_AGENTS);
+  const registry = createRegistry(CONTINUITY_AGENTS);
   const tools = buildTools(registry, store);
   assert.deepEqual(
     tools.map((t) => t.name),
@@ -37,7 +37,7 @@ test("one tool per registered agent plus read-only canon_list", () => {
 
 test("analyze at standard invokes the stub agent and returns validated empty findings with a minimal context", async () => {
   const { store } = seededStore();
-  const registry = createRegistry(STUB_AGENTS);
+  const registry = createRegistry(CONTINUITY_AGENTS);
   const agent = registry.get("canon-lore")!;
   const result = (await runAnalyzeTool(agent, store, {
     projectId: "demo",
@@ -57,7 +57,7 @@ test("analyze at standard invokes the stub agent and returns validated empty fin
 
 test("explicit strictness on the call overrides project defaults", async () => {
   const { store } = seededStore();
-  const registry = createRegistry(STUB_AGENTS);
+  const registry = createRegistry(CONTINUITY_AGENTS);
   const agent = registry.get("timeline")!;
   const result = (await runAnalyzeTool(agent, store, {
     projectId: "demo",
@@ -70,7 +70,7 @@ test("explicit strictness on the call overrides project defaults", async () => {
 
 test("strictness off never invokes the agent and returns a reason", async () => {
   const { store } = seededStore();
-  const registry = createRegistry(STUB_AGENTS);
+  const registry = createRegistry(CONTINUITY_AGENTS);
   const agent = registry.get("character-consistency")!;
   const result = (await runAnalyzeTool(agent, store, {
     projectId: "demo",
@@ -84,7 +84,7 @@ test("strictness off never invokes the agent and returns a reason", async () => 
 
 test("a disabled agent in project settings is not invoked", async () => {
   const tmpStore = disabledTimelineStore();
-  const registry = createRegistry(STUB_AGENTS);
+  const registry = createRegistry(CONTINUITY_AGENTS);
   const agent = registry.get("timeline")!;
   const result = (await runAnalyzeTool(agent, tmpStore, {
     projectId: "demo",
@@ -97,7 +97,7 @@ test("a disabled agent in project settings is not invoked", async () => {
 
 test("canon_list returns the seeded confirmed snapshot with status counts", async () => {
   const { store } = seededStore();
-  const registry = createRegistry(STUB_AGENTS);
+  const registry = createRegistry(CONTINUITY_AGENTS);
   const tools = buildTools(registry, store);
   const canonList = tools.find((t) => t.name === "canon_list")!;
   const result = (await canonList.handler({ projectId: "demo" })) as {
@@ -114,7 +114,7 @@ test("canon_list returns the seeded confirmed snapshot with status counts", asyn
 
 test("handlers reject invalid input with a useful message", async () => {
   const { store } = seededStore();
-  const registry = createRegistry(STUB_AGENTS);
+  const registry = createRegistry(CONTINUITY_AGENTS);
   const tools = buildTools(registry, store);
   const analyze = tools.find((t) => t.name === "analyze_canon_lore")!;
   await assert.rejects(() => analyze.handler({ projectId: "demo", chunk: { text: "" } }), /chunk/);
@@ -124,7 +124,7 @@ test("handlers reject invalid input with a useful message", async () => {
 
 test("the runtime re-gates findings: below-floor and dismissed findings never reach the caller", async () => {
   const { store } = seededStore();
-  const registry = createRegistry(STUB_AGENTS);
+  const registry = createRegistry(CONTINUITY_AGENTS);
   const agent = registry.get("canon-lore")!;
   const whisperer = {
     ...agent,

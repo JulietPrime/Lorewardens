@@ -6,9 +6,10 @@ access** and **no write paths**: findings are structured, non-destructive
 reports, and every canon write requires writer confirmation outside this
 server.
 
-> Agent analysis logic ships in a later increment — the three agents are
-> currently stubs that return zero findings. The tool surface, gating,
-> context selection, and canon seeding implemented here are final.
+The three continuity agents are the real deterministic lexical matchers from
+`@lorewardens/agents` (`CONTINUITY_AGENTS`). Their detection approach is
+keyword/negation/antonym-based (see `docs/agent-contract.md`); a smarter
+engine can replace the matchers later without changing the tool surface.
 
 ## Run
 

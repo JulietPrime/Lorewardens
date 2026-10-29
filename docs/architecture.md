@@ -9,7 +9,7 @@ Agents never auto-rewrite or take creative control.
 | Component | Package | Status | Depends on |
 | --- | --- | --- | --- |
 | Core domain (types, strictness, canon store, context selector, agent contract, registry) | `packages/core` | current | — |
-| Continuity agents (Canon/Lore, Character Consistency, Timeline) | `packages/agents` | planned (increment 1) | core |
+| Continuity agents (Canon/Lore, Character Consistency, Timeline) | `packages/agents` | current (increment 1: deterministic lexical matchers) | core |
 | Local MCP server (stdio, no external permissions) | `packages/mcp-server` | current (increment 1: analyze tools + read-only `canon_list`, fixture-seeded canon store, smoke script) | core, agents |
 | Seeded-error proof suite | `packages/proof` | planned (increment 1) | core, agents, mcp-server |
 | Living Canon store persistence | `packages/core` (v0 in-memory; file-backed next) | current | core types |

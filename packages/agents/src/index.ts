@@ -1,4 +1,15 @@
-import type { AgentDescriptor, AnalyzeInput, ContinuityAgent, Finding } from "@lorewardens/core";
+import type { AgentDescriptor, ContinuityAgent } from "@lorewardens/core";
+import { createCanonLoreAgent } from "./canon-lore.js";
+import { createCharacterConsistencyAgent } from "./character-consistency.js";
+import { createTimelineAgent } from "./timeline.js";
+
+export { createCanonLoreAgent, detectCanonContradictions, canonLoreFindings } from "./canon-lore.js";
+export {
+  createCharacterConsistencyAgent,
+  detectCharacterIssues,
+  detectRelationshipDrift,
+} from "./character-consistency.js";
+export { createTimelineAgent, detectTimelineIssues, timelineFindings } from "./timeline.js";
 
 export const AGENT_DESCRIPTORS: AgentDescriptor[] = [
   {
@@ -42,14 +53,22 @@ export const AGENT_DESCRIPTORS: AgentDescriptor[] = [
   },
 ];
 
-function stubAgent(descriptor: AgentDescriptor): ContinuityAgent {
-  return {
-    id: descriptor.id,
-    descriptor,
-    async analyze(_input: AnalyzeInput): Promise<Finding[]> {
-      return [];
-    },
-  };
+function agentById(id: string): AgentDescriptor {
+  const descriptor = AGENT_DESCRIPTORS.find((d) => d.id === id);
+  if (!descriptor) throw new Error(`No agent descriptor with id '${id}'`);
+  return descriptor;
 }
 
-export const STUB_AGENTS: ContinuityAgent[] = AGENT_DESCRIPTORS.map(stubAgent);
+export const CANON_LORE_AGENT: ContinuityAgent = createCanonLoreAgent(agentById("canon-lore"));
+
+export const CHARACTER_CONSISTENCY_AGENT: ContinuityAgent = createCharacterConsistencyAgent(
+  agentById("character-consistency"),
+);
+
+export const TIMELINE_AGENT: ContinuityAgent = createTimelineAgent(agentById("timeline"));
+
+export const CONTINUITY_AGENTS: ContinuityAgent[] = [
+  CANON_LORE_AGENT,
+  CHARACTER_CONSISTENCY_AGENT,
+  TIMELINE_AGENT,
+];
