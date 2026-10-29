@@ -37,6 +37,6 @@ npm test
 1. `design-lorewardens-foundations` — repo scaffold, architecture doc, Living Canon model, findings schema, agent contract (this commit)
 2. `expose-lore-agents-as-local-mcp-tools` — local MCP server, done (stdio tools + read-only canon_list, fixture canon store, smoke script; see `packages/mcp-server/README.md`)
 3. `implement-three-continuity-agents` — Canon/Lore, Character Consistency, Timeline, done (deterministic lexical matchers behind the same contract; `CONTINUITY_AGENTS` replaces the stubs)
-4. `prove-agents-catch-seeded-errors` — seeded manuscript proves standard strictness catches every seeded error while clean passages stay silent
+4. `prove-agents-catch-seeded-errors` — done (seeded manuscript `packages/proof/fixtures/manuscript/ch4.md` proves standard strictness catches every seeded error through the real MCP tool path while clean passages stay silent; strictness matrix, strict-only notes, schema/offset and determinism asserted; see `packages/proof/README.md`)
 
 See `docs/architecture.md` for the component map and `docs/agent-contract.md` for the strictness semantics.

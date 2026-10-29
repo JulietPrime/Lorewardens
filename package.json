@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "npm run build -w @lorewardens/core && npm run build -w @lorewardens/agents && npm run build -w @lorewardens/mcp-server && npm run build -w @lorewardens/proof",
-    "test": "npm run build && npm run test -w @lorewardens/core && npm run test -w @lorewardens/agents && npm run test -w @lorewardens/mcp-server",
+    "test": "npm run build && npm run test -w @lorewardens/core && npm run test -w @lorewardens/agents && npm run test -w @lorewardens/mcp-server && npm run test -w @lorewardens/proof",
     "clean": "rm -rf packages/*/dist"
   },
   "devDependencies": {

@@ -1,0 +1,25 @@
+{
+  "projectId": "proof-strict",
+  "agents": [
+    {
+      "agentId": "canon-lore",
+      "enabled": true,
+      "strictness": "strict",
+      "options": { "objectLocationChecks": true }
+    },
+    {
+      "agentId": "character-consistency",
+      "enabled": true,
+      "strictness": "strict",
+      "options": { "relationshipState": true }
+    },
+    {
+      "agentId": "timeline",
+      "enabled": true,
+      "strictness": "strict",
+      "options": {}
+    }
+  ],
+  "exceptions": [],
+  "dismissed": []
+}

@@ -1,0 +1,360 @@
+{
+  "projectId": "proof-strict",
+  "entries": [
+    {
+      "id": "canon_rule_magic_memory",
+      "projectId": "proof-strict",
+      "kind": "rule",
+      "text": "Every spell costs the caster one personal memory; the stronger the spell, the more precious the memory lost.",
+      "tags": [
+        "magic",
+        "cost"
+      ],
+      "status": "confirmed",
+      "locked": true,
+      "lockReason": "Core premise of the novel; the writer has locked this rule.",
+      "sources": [
+        {
+          "file": "proof/ch1.md",
+          "startOffset": 210,
+          "endOffset": 318,
+          "line": 12
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_weeping_gate",
+      "projectId": "proof-strict",
+      "kind": "fact",
+      "text": "The Weeping Gate is the only gate in the city's north wall, and it is sealed since the siege.",
+      "tags": [
+        "gate",
+        "weeping",
+        "city",
+        "wall"
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch2.md",
+          "startOffset": 88,
+          "endOffset": 190,
+          "line": 5
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_karth_ferry",
+      "projectId": "proof-strict",
+      "kind": "fact",
+      "text": "The Karth ferry crosses the river in ten minutes when the water is low.",
+      "tags": [
+        "ferry",
+        "river",
+        "karth"
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch3.md",
+          "startOffset": 402,
+          "endOffset": 474,
+          "line": 21
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_astrolabe",
+      "projectId": "proof-strict",
+      "kind": "fact",
+      "text": "The glass astrolabe rests on the surveyor's bench in the map room.",
+      "tags": [
+        "astrolabe",
+        "glass"
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch1.md",
+          "startOffset": 512,
+          "endOffset": 578,
+          "line": 28
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_harbor_ledger",
+      "projectId": "proof-strict",
+      "kind": "fact",
+      "text": "The harbor master's ledger is kept in the lighthouse.",
+      "tags": [
+        "ledger",
+        "lighthouse"
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch3.md",
+          "startOffset": 610,
+          "endOffset": 664,
+          "line": 33
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "characters": [
+    {
+      "id": "char_mira",
+      "projectId": "proof-strict",
+      "name": "Mira",
+      "aliases": [
+        "the cartographer"
+      ],
+      "summary": "Court cartographer mapping the old city walls before their demolition.",
+      "traits": [
+        "methodical",
+        "curious"
+      ],
+      "abilities": [
+        "surveying",
+        "map-drawing"
+      ],
+      "injuries": [],
+      "goals": [
+        "finish the wall survey before the demolition order"
+      ],
+      "voice": "Precise, prefers measurements to adjectives.",
+      "relationships": [
+        {
+          "targetCharacterId": "char_daven",
+          "type": "mentor",
+          "notes": "Daven apprentices under Mira."
+        }
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch1.md",
+          "startOffset": 0,
+          "endOffset": 120,
+          "line": 1
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "char_daven",
+      "projectId": "proof-strict",
+      "name": "Daven",
+      "aliases": [],
+      "summary": "Mira's apprentice, eager and careless with instruments.",
+      "traits": [
+        "eager",
+        "careless"
+      ],
+      "abilities": [],
+      "injuries": [
+        "sprained wrist from the scaffold fall"
+      ],
+      "goals": [
+        "earn his surveyor's mark"
+      ],
+      "relationships": [
+        {
+          "targetCharacterId": "char_mira",
+          "type": "apprentice"
+        }
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch1.md",
+          "startOffset": 140,
+          "endOffset": 205,
+          "line": 3
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "char_calla",
+      "projectId": "proof-strict",
+      "name": "Calla",
+      "aliases": [],
+      "summary": "Old gatekeeper who held the Weeping Gate through the siege and now walks the wall with the survey party.",
+      "traits": [
+        "weathered",
+        "watchful"
+      ],
+      "abilities": [],
+      "injuries": [],
+      "goals": [
+        "keep the story of the siege accurate"
+      ],
+      "relationships": [],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch2.md",
+          "startOffset": 22,
+          "endOffset": 86,
+          "line": 2
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "char_bren",
+      "projectId": "proof-strict",
+      "name": "Bren",
+      "aliases": [],
+      "summary": "Ferryman at the Karth crossing.",
+      "traits": [
+        "sturdy"
+      ],
+      "abilities": [],
+      "injuries": [],
+      "goals": [
+        "keep the ferry license in the family"
+      ],
+      "relationships": [
+        {
+          "targetCharacterId": "char_oskar",
+          "type": "ally",
+          "notes": "Old comrades from the siege watch; still friends first."
+        }
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch3.md",
+          "startOffset": 12,
+          "endOffset": 60,
+          "line": 2
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "char_oskar",
+      "projectId": "proof-strict",
+      "name": "Oskar",
+      "aliases": [],
+      "summary": "Harbor watchman and Bren's oldest comrade.",
+      "traits": [
+        "reserved"
+      ],
+      "abilities": [],
+      "injuries": [],
+      "goals": [
+        "keep the harbor ledgers honest"
+      ],
+      "relationships": [],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch3.md",
+          "startOffset": 64,
+          "endOffset": 118,
+          "line": 3
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_siege",
+      "projectId": "proof-strict",
+      "description": "The siege that sealed the Weeping Gate.",
+      "order": 0,
+      "precision": "year",
+      "participants": [
+        "char_calla"
+      ],
+      "status": "confirmed",
+      "locked": true,
+      "lockReason": "The writer locked the siege as the earliest told event; nothing in the story precedes it.",
+      "sources": [
+        {
+          "file": "proof/ch2.md",
+          "startOffset": 88,
+          "endOffset": 190,
+          "line": 5
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "ev_wall_survey",
+      "projectId": "proof-strict",
+      "description": "Mira begins the survey of the north wall at the Weeping Gate.",
+      "order": 1,
+      "precision": "day",
+      "participants": [
+        "char_mira"
+      ],
+      "location": "the Weeping Gate",
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch1.md",
+          "startOffset": 0,
+          "endOffset": 120,
+          "line": 1
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "ev_harbor_lanterns",
+      "projectId": "proof-strict",
+      "description": "Mira sketches the harbor lanterns from the southern tower.",
+      "order": 2,
+      "precision": "day",
+      "participants": [
+        "char_mira"
+      ],
+      "location": "the southern tower",
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        {
+          "file": "proof/ch3.md",
+          "startOffset": 200,
+          "endOffset": 262,
+          "line": 9
+        }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ]
+}
