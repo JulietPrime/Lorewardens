@@ -1,0 +1,18 @@
+{
+  "name": "@lorewardens/proof",
+  "version": "0.1.0",
+  "description": "Seeded-error proof suite for Lorewardens agents",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@lorewardens/core": "0.1.0",
+    "@lorewardens/agents": "0.1.0",
+    "@lorewardens/mcp-server": "0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/node": "^20.14.10"
+  }
+}

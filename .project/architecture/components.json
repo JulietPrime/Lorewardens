@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "project": "Lorewardens",
+  "components": [
+    {
+      "id": "core",
+      "name": "@lorewardens/core",
+      "type": "library",
+      "status": "current",
+      "depends_on": [],
+      "description": "Domain types, strictness gating, canon snapshot/store, minimal-context selector, agent contract, agent registry",
+      "owner": "architect"
+    },
+    {
+      "id": "canon-store",
+      "name": "Living Canon store",
+      "type": "data",
+      "status": "current",
+      "depends_on": ["core"],
+      "description": "Writer-confirmed canon persistence; v0 InMemoryCanonStore, file-backed store follows",
+      "owner": "architect"
+    },
+    {
+      "id": "agents",
+      "name": "@lorewardens/agents",
+      "type": "library",
+      "status": "planned",
+      "depends_on": ["core"],
+      "description": "Continuity agents: canon-lore, character-consistency, timeline (stub agents ship with foundations)",
+      "owner": "builder"
+    },
+    {
+      "id": "mcp-server",
+      "name": "@lorewardens/mcp-server",
+      "type": "service",
+      "status": "planned",
+      "depends_on": ["core", "agents"],
+      "description": "Local stdio MCP server exposing each enabled agent as a tool; zero network, non-destructive",
+      "owner": "builder"
+    },
+    {
+      "id": "proof",
+      "name": "@lorewardens/proof",
+      "type": "test-suite",
+      "status": "planned",
+      "depends_on": ["core", "agents", "mcp-server"],
+      "description": "Seeded-error manuscript + automated suite proving standard strictness catches every seeded error; clean passages stay silent",
+      "owner": "builder"
+    },
+    {
+      "id": "google-docs-integration",
+      "name": "Google Docs integration",
+      "type": "client",
+      "status": "potential",
+      "depends_on": ["mcp-server"],
+      "description": "Browser extension and/or Docs API + sidebar/comments, OAuth Testing mode, unpacked extension for local testing",
+      "owner": "architect"
+    },
+    {
+      "id": "extended-roster",
+      "name": "Extended agent roster (14 more agents)",
+      "type": "library",
+      "status": "potential",
+      "depends_on": ["agents"],
+      "description": "Domain, Language & Prose, Narrative, Optional families per project-files/Lorewardens Agents.md; same contract",
+      "owner": "architect"
+    }
+  ]
+}

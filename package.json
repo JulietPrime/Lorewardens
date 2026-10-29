@@ -1,0 +1,21 @@
+{
+  "name": "lorewardens",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Modular multi-agent fiction continuity checking. Non-destructive findings against a living, writer-owned Canon.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run build --workspaces --if-present && npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/node": "^20.14.10"
+  }
+}
