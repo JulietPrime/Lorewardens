@@ -36,13 +36,16 @@
         "vocabulary-repetition",
         "style-voice",
         "character-voice",
-        "period-dialect"
+        "period-dialect",
+        "plot-thread",
+        "pacing-tension",
+        "pov-consistency"
       ],
       "description": "The agent that produced the finding."
     },
     "category": {
       "type": "string",
-      "enum": ["canon", "character", "timeline", "language", "prose"]
+      "enum": ["canon", "character", "timeline", "language", "prose", "narrative"]
     },
     "type": {
       "type": "string",

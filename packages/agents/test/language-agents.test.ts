@@ -8,6 +8,7 @@ import {
   CONTINUITY_AGENTS,
   GRAMMAR_MECHANICS_AGENT,
   LANGUAGE_AGENTS,
+  NARRATIVE_AGENTS,
   PERIOD_DIALECT_AGENT,
   STYLE_VOICE_AGENT,
   VOCABULARY_REPETITION_AGENT,
@@ -96,6 +97,7 @@ test("the five language agents are exported behind the same contract", () => {
   assert.deepEqual(ALL_AGENTS.map((a) => a.id), [
     ...CONTINUITY_AGENTS.map((a) => a.id),
     ...LANGUAGE_AGENTS.map((a) => a.id),
+    ...NARRATIVE_AGENTS.map((a) => a.id),
   ]);
   for (const agent of LANGUAGE_AGENTS) {
     assert.equal(typeof agent.analyze, "function");

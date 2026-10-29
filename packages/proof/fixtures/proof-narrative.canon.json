@@ -1,0 +1,100 @@
+{
+  "projectId": "proof-narrative",
+  "entries": [
+    {
+      "id": "canon_promise_blade",
+      "projectId": "proof-narrative",
+      "kind": "rule",
+      "text": "Maren has sworn to always guard the eastern bridge until the stolen blade returns to the Ash Shrine.",
+      "tags": ["plot-thread"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_promise_oath",
+      "projectId": "proof-narrative",
+      "kind": "rule",
+      "text": "Gwyn swore an oath to protect the heir at all times.",
+      "tags": ["plot-thread"],
+      "status": "confirmed",
+      "locked": true,
+      "lockReason": "The oath holds until the sequel; break it only on the writer's word.",
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_rule_pov_maren",
+      "projectId": "proof-narrative",
+      "kind": "rule",
+      "text": "The story is told from Lady Maren's point of view.",
+      "tags": ["pov"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "characters": [
+    {
+      "id": "char_maren",
+      "projectId": "proof-narrative",
+      "name": "Maren",
+      "aliases": ["Lady Maren"],
+      "summary": "The sworn keeper of the eastern bridge and the story's point-of-view character.",
+      "traits": ["watchful", "stubborn"],
+      "abilities": [],
+      "injuries": [],
+      "goals": ["see the stolen blade returned to the Ash Shrine"],
+      "relationships": [
+        { "targetCharacterId": "char_osric", "type": "quartermaster", "notes": "Osric keeps Maren's packs and ledgers." }
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "char_osric",
+      "projectId": "proof-narrative",
+      "name": "Osric",
+      "aliases": [],
+      "summary": "A methodical quartermaster who counts everything twice and says little.",
+      "traits": ["methodical", "quiet"],
+      "abilities": [],
+      "injuries": [],
+      "goals": ["keep the tally honest"],
+      "relationships": [
+        { "targetCharacterId": "char_maren", "type": "sworn-lady" }
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "char_gwyn",
+      "projectId": "proof-narrative",
+      "name": "Gwyn",
+      "aliases": [],
+      "summary": "An oath-bound shield of the heir, silent about the night the beacon went dark.",
+      "traits": ["taciturn", "loyal"],
+      "abilities": [],
+      "injuries": [],
+      "goals": ["protect the heir at all times"],
+      "relationships": [],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "events": []
+}

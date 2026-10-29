@@ -7,6 +7,9 @@ import { createVocabularyRepetitionAgent } from "./vocabulary-repetition.js";
 import { createStyleVoiceAgent } from "./style-voice.js";
 import { createCharacterVoiceAgent } from "./character-voice.js";
 import { createPeriodDialectAgent } from "./period-dialect.js";
+import { createPlotThreadAgent } from "./plot-thread.js";
+import { createPacingTensionAgent } from "./pacing-tension.js";
+import { createPovConsistencyAgent } from "./pov-consistency.js";
 
 export { createCanonLoreAgent, detectCanonContradictions, canonLoreFindings } from "./canon-lore.js";
 export {
@@ -20,6 +23,15 @@ export { vocabularyRepetitionFindings } from "./vocabulary-repetition.js";
 export { styleVoiceFindings } from "./style-voice.js";
 export { characterVoiceFindings } from "./character-voice.js";
 export { periodDialectFindings } from "./period-dialect.js";
+export { plotThreadFindings, plotPromises, firstConflict } from "./plot-thread.js";
+export { pacingTensionFindings, staticStretchRuns, rushedRuns, abruptTurns } from "./pacing-tension.js";
+export {
+  povConsistencyFindings,
+  povRules,
+  innerStateAttributions,
+  declaredPovCharacter,
+  distanceShift,
+} from "./pov-consistency.js";
 
 export const AGENT_DESCRIPTORS: AgentDescriptor[] = [
   {
@@ -106,6 +118,33 @@ export const AGENT_DESCRIPTORS: AgentDescriptor[] = [
     defaultStrictness: "standard",
     options: [],
   },
+  {
+    id: "plot-thread",
+    family: "narrative",
+    title: "Plot Thread / Promise",
+    description:
+      "Watches the promises the story makes. Flags text that conflicts with a confirmed plot-thread canon entry (locked promises escalate), and at strict level notes promises the narration plants and open questions it raises. Describes the thread; never says what the story must do next. The writer tracks or retires threads in canon.",
+    defaultStrictness: "standard",
+    options: [],
+  },
+  {
+    id: "pacing-tension",
+    family: "narrative",
+    title: "Pacing / Tension",
+    description:
+      "Observational pacing notes only: long unbroken narration stretches, rushed passages of very short sentences, and abrupt turns between rising and falling tension. Describes what the text does; offers no advice and no rewrites.",
+    defaultStrictness: "standard",
+    options: [],
+  },
+  {
+    id: "pov-consistency",
+    family: "narrative",
+    title: "POV Consistency",
+    description:
+      "Watches point of view inside the changed chunk: inner-state head-hops against a confirmed POV rule (or across characters when none is declared), and first- to third-person narration drift, with quoted dialogue excluded. A declared omniscient narration is respected as intentional; locked POV rules escalate.",
+    defaultStrictness: "standard",
+    options: [],
+  },
 ];
 
 function agentById(id: string): AgentDescriptor {
@@ -134,6 +173,12 @@ export const CHARACTER_VOICE_AGENT: ContinuityAgent = createCharacterVoiceAgent(
 
 export const PERIOD_DIALECT_AGENT: ContinuityAgent = createPeriodDialectAgent(agentById("period-dialect"));
 
+export const PLOT_THREAD_AGENT: ContinuityAgent = createPlotThreadAgent(agentById("plot-thread"));
+
+export const PACING_TENSION_AGENT: ContinuityAgent = createPacingTensionAgent(agentById("pacing-tension"));
+
+export const POV_CONSISTENCY_AGENT: ContinuityAgent = createPovConsistencyAgent(agentById("pov-consistency"));
+
 export const CONTINUITY_AGENTS: ContinuityAgent[] = [
   CANON_LORE_AGENT,
   CHARACTER_CONSISTENCY_AGENT,
@@ -148,4 +193,6 @@ export const LANGUAGE_AGENTS: ContinuityAgent[] = [
   PERIOD_DIALECT_AGENT,
 ];
 
-export const ALL_AGENTS: ContinuityAgent[] = [...CONTINUITY_AGENTS, ...LANGUAGE_AGENTS];
+export const NARRATIVE_AGENTS: ContinuityAgent[] = [PLOT_THREAD_AGENT, PACING_TENSION_AGENT, POV_CONSISTENCY_AGENT];
+
+export const ALL_AGENTS: ContinuityAgent[] = [...CONTINUITY_AGENTS, ...LANGUAGE_AGENTS, ...NARRATIVE_AGENTS];

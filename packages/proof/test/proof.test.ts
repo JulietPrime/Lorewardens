@@ -122,7 +122,7 @@ function findingsOf(entries: PassEntry[]): { entry: PassEntry; finding: Finding 
 }
 
 test("proof fixtures seed the two increment-1 projects plus proof-language", () => {
-  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-strict"]);
+  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-narrative", "proof-strict"]);
   assert.deepEqual(skipped, [], "no fixture is skipped or malformed");
 });
 

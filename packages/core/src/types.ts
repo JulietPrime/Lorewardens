@@ -12,9 +12,12 @@ export type ContinuityAgentId =
   | "vocabulary-repetition"
   | "style-voice"
   | "character-voice"
-  | "period-dialect";
+  | "period-dialect"
+  | "plot-thread"
+  | "pacing-tension"
+  | "pov-consistency";
 
-export type Category = "canon" | "character" | "timeline" | "language" | "prose";
+export type Category = "canon" | "character" | "timeline" | "language" | "prose" | "narrative";
 
 export interface Span {
   file: string;

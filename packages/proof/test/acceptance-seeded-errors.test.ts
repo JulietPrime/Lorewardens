@@ -216,7 +216,7 @@ function assertFindingRow(seed: SeedRow, finding: Finding, paragraph: Manuscript
 }
 
 test("acceptance: the manuscript is exactly the documented seeded-error chapter (ac-1)", async () => {
-  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-strict"], "fixtures seed the two increment-1 projects plus proof-language");
+  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-narrative", "proof-strict"], "fixtures seed the two increment-1 projects plus the language and narrative proof projects");
   assert.deepEqual(skipped, [], "no fixture is skipped or malformed");
 
   // Byte-exact layout: every documented slot resolves to its exact sentence,
@@ -240,10 +240,12 @@ test("acceptance: the manuscript is exactly the documented seeded-error chapter 
   }
 
   // Category coverage: canon, character and timeline errors are all seeded;
-  // the language/prose categories stay empty in this increment-1 suite.
-  const counts: Record<Category, number> = { canon: 0, character: 0, timeline: 0, language: 0, prose: 0 };
+  // the language/prose categories stay empty in this increment-1 suite, and
+  // the narrative category stays empty too — the increment-1 suite must
+  // assert it seeds NO narrative errors.
+  const counts: Record<Category, number> = { canon: 0, character: 0, timeline: 0, language: 0, prose: 0, narrative: 0 };
   for (const seed of E_SEEDS) counts[seed.category] += 1;
-  assert.deepEqual(counts, { canon: 3, character: 4, timeline: 3, language: 0, prose: 0 });
+  assert.deepEqual(counts, { canon: 3, character: 4, timeline: 3, language: 0, prose: 0, narrative: 0 });
 
   // The two locked seeds contradict canon the writer has actually locked.
   const snapshot = await store.read("proof");
@@ -474,7 +476,7 @@ test("acceptance: proof sources are offline, dependency-clean and deterministic 
   const labels = scanned.map((s) => s.label).sort();
   assert.deepEqual(
     labels,
-    ["src/index.ts", "test/acceptance-seeded-errors.test.ts", "test/language-proof.test.ts", "test/proof.test.ts"],
+    ["src/index.ts", "test/acceptance-seeded-errors.test.ts", "test/language-proof.test.ts", "test/narrative-proof.test.ts", "test/proof.test.ts"],
     "the offline scan covers the whole proof package",
   );
 

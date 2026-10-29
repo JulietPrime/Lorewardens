@@ -48,6 +48,24 @@
       "enabled": false,
       "strictness": "standard",
       "options": {}
+    },
+    {
+      "agentId": "plot-thread",
+      "enabled": false,
+      "strictness": "standard",
+      "options": {}
+    },
+    {
+      "agentId": "pacing-tension",
+      "enabled": false,
+      "strictness": "standard",
+      "options": {}
+    },
+    {
+      "agentId": "pov-consistency",
+      "enabled": false,
+      "strictness": "standard",
+      "options": {}
     }
   ],
   "exceptions": [],

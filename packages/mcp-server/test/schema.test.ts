@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { test } from "node:test";
-import { makeFinding, type ContinuityAgentId } from "@lorewardens/core";
+import { makeFinding, type Category, type ContinuityAgentId } from "@lorewardens/core";
 import { assertValidFindings, validateFinding } from "../src/validate.js";
 
 const schemaPath = fileURLToPath(new URL("../../../../schemas/finding.schema.json", import.meta.url));
@@ -81,4 +81,15 @@ test("validator accepts the language-roster agents and categories (additive)", (
   }
   const unknown = makeFinding({ ...validDraft(), agent: "poetry-rhyme" as ContinuityAgentId });
   assert.ok(validateFinding(unknown).length > 0, "unknown agents are still rejected");
+});
+
+test("validator accepts the narrative-roster agents and category (additive)", () => {
+  for (const agent of ["plot-thread", "pacing-tension", "pov-consistency"] as const) {
+    const finding = makeFinding({ ...validDraft(), agent, category: "narrative" });
+    assert.deepEqual(validateFinding(finding), [], `${agent}/narrative validates`);
+  }
+  const unknownAgent = makeFinding({ ...validDraft(), agent: "theme-tracker" as ContinuityAgentId });
+  assert.ok(validateFinding(unknownAgent).length > 0, "unknown agents are still rejected");
+  const unknownCategory = makeFinding({ ...validDraft(), category: "theme" as unknown as Category });
+  assert.ok(validateFinding(unknownCategory).length > 0, "unknown categories are still rejected");
 });
