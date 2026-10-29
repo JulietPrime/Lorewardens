@@ -474,7 +474,7 @@ test("acceptance: proof sources are offline, dependency-clean and deterministic 
   const labels = scanned.map((s) => s.label).sort();
   assert.deepEqual(
     labels,
-    ["src/index.ts", "test/acceptance-language.test.ts", "test/acceptance-seeded-errors.test.ts", "test/language-proof.test.ts", "test/proof.test.ts"],
+    ["src/index.ts", "test/acceptance-seeded-errors.test.ts", "test/language-proof.test.ts", "test/proof.test.ts"],
     "the offline scan covers the whole proof package",
   );
 
