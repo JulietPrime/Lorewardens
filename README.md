@@ -35,7 +35,7 @@ npm test
 ## Status: increment 1
 
 1. `design-lorewardens-foundations` — repo scaffold, architecture doc, Living Canon model, findings schema, agent contract (this commit)
-2. `expose-lore-agents-as-local-mcp-tools` — local MCP server, in progress next
+2. `expose-lore-agents-as-local-mcp-tools` — local MCP server, done (stdio tools + read-only canon_list, fixture canon store, smoke script; see `packages/mcp-server/README.md`)
 3. `implement-three-continuity-agents` — Canon/Lore, Character Consistency, Timeline
 4. `prove-agents-catch-seeded-errors` — seeded manuscript proves standard strictness catches every seeded error while clean passages stay silent
 
