@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { test } from "node:test";
-import { makeFinding } from "@lorewardens/core";
+import { makeFinding, type ContinuityAgentId } from "@lorewardens/core";
 import { assertValidFindings, validateFinding } from "../src/validate.js";
 
 const schemaPath = fileURLToPath(new URL("../../../../schemas/finding.schema.json", import.meta.url));
@@ -66,4 +66,19 @@ test("malformed findings are rejected before they can reach a client", () => {
 
 test("empty agent output (stub behavior) is trivially valid", () => {
   assert.doesNotThrow(() => assertValidFindings([]));
+});
+
+test("validator accepts the language-roster agents and categories (additive)", () => {
+  for (const [agent, category] of [
+    ["grammar-mechanics", "language"],
+    ["vocabulary-repetition", "language"],
+    ["period-dialect", "language"],
+    ["style-voice", "prose"],
+    ["character-voice", "prose"],
+  ] as const) {
+    const finding = makeFinding({ ...validDraft(), agent, category });
+    assert.deepEqual(validateFinding(finding), [], `${agent}/${category} validates`);
+  }
+  const unknown = makeFinding({ ...validDraft(), agent: "poetry-rhyme" as ContinuityAgentId });
+  assert.ok(validateFinding(unknown).length > 0, "unknown agents are still rejected");
 });

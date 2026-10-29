@@ -1,0 +1,77 @@
+{
+  "projectId": "proof-language",
+  "entries": [
+    {
+      "id": "canon_rule_period_voice",
+      "projectId": "proof-language",
+      "kind": "rule",
+      "text": "The story is set in a medieval kingdom; the narrative keeps a formal, period voice.",
+      "tags": ["period", "voice"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "characters": [
+    {
+      "id": "char_elinor",
+      "projectId": "proof-language",
+      "name": "Elinor",
+      "aliases": [],
+      "summary": "A courtly scholar who reads maps the way others read scripture.",
+      "traits": ["scholarly", "warm"],
+      "abilities": ["cartography", "languages"],
+      "injuries": [],
+      "goals": ["chart the river roads before the first frost"],
+      "voice": "Scholarly and warm. She never says 'destiny'; she prefers 'the road that made us'.",
+      "relationships": [
+        { "targetCharacterId": "char_tam", "type": "mentor", "notes": "Tam guides Elinor's horses on the wall roads." }
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "char_tam",
+      "projectId": "proof-language",
+      "name": "Tam",
+      "aliases": [],
+      "summary": "A blunt gate sergeant who distrusts anything he cannot see from the wall.",
+      "traits": ["blunt", "watchful"],
+      "abilities": [],
+      "injuries": [],
+      "goals": ["keep the gate roster honest"],
+      "voice": "Blunt and clipped. He doesn't use contractions, even when angry.",
+      "relationships": [
+        { "targetCharacterId": "char_elinor", "type": "apprentice" }
+      ],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "char_marda",
+      "projectId": "proof-language",
+      "name": "Marda",
+      "aliases": [],
+      "summary": "An old ferry-woman who has crossed the ford in every season.",
+      "traits": ["patient", "stubborn"],
+      "abilities": [],
+      "injuries": [],
+      "goals": ["retire before the river takes another boat"],
+      "relationships": [],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "events": []
+}

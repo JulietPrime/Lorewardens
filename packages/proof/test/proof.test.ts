@@ -121,8 +121,8 @@ function findingsOf(entries: PassEntry[]): { entry: PassEntry; finding: Finding 
   return out;
 }
 
-test("proof fixtures seed exactly the two proof projects", () => {
-  assert.deepEqual(projectIds, ["proof", "proof-strict"]);
+test("proof fixtures seed the two increment-1 projects plus proof-language", () => {
+  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-strict"]);
   assert.deepEqual(skipped, [], "no fixture is skipped or malformed");
 });
 

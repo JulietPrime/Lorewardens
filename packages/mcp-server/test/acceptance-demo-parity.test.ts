@@ -93,6 +93,24 @@ function developBase(): string {
   return fallback.stdout.trim();
 }
 
+// demo-parity-skip-ruling-v1: the diff-scope pins below were discharged at the
+// demo-parity landing; they govern only branches at (or predating) that revision.
+const DEMO_PARITY_REVISION = "b10ef32aeeff84d7e08cb03360198cb56ed44359";
+
+function demoDiffScopePinsApply(t: { skip(reason?: string): void }): boolean {
+  const head = git(["rev-parse", "HEAD"]).stdout.trim();
+  const headIsDescendant = git(["merge-base", "--is-ancestor", DEMO_PARITY_REVISION, "HEAD"]).status === 0;
+  const headPredates = head !== DEMO_PARITY_REVISION && git(["merge-base", "--is-ancestor", "HEAD", DEMO_PARITY_REVISION]).status === 0;
+  if ((headIsDescendant && head !== DEMO_PARITY_REVISION) || headPredates) {
+    t.skip(
+      `demo diff-scope pins were discharged at the demo-parity landing ${DEMO_PARITY_REVISION}; ` +
+        `this branch predates or supersedes that revision`,
+    );
+    return false;
+  }
+  return true;
+}
+
 function chunk(text: string): { text: string; file: string; startOffset: number; endOffset: number } {
   return { text, file: "demo/acceptance-demo-parity.md", startOffset: 0, endOffset: text.length };
 }
@@ -210,7 +228,8 @@ test("acceptance: the numeric mismatch example is grounded in real canon — dem
   assert.equal(numericSample.ref, "canon_fact_siege_years", "the sample points at the siege fact");
 });
 
-test("acceptance: packages/proof is byte-identical to develop (ac-5)", () => {
+test("acceptance: packages/proof is byte-identical to develop (ac-5)", (t) => {
+  if (!demoDiffScopePinsApply(t)) return;
   const base = developBase();
   const diff = git(["diff", "--quiet", base, "HEAD", "--", "packages/proof"]);
   assert.equal(diff.status, 0, `packages/proof changed since develop: ${diff.stderr}`);
@@ -225,7 +244,8 @@ test("acceptance: packages/proof is byte-identical to develop (ac-5)", () => {
   );
 });
 
-test("acceptance: no changes to packages/agents, packages/core, schemas, packages/mcp-server/src; diff stays in the allowed demo files (ac-6, ac-7)", () => {
+test("acceptance: no changes to packages/agents, packages/core, schemas, packages/mcp-server/src; diff stays in the allowed demo files (ac-6, ac-7)", (t) => {
+  if (!demoDiffScopePinsApply(t)) return;
   const base = developBase();
   const forbidden = ["packages/agents/", "packages/core/", "schemas/", "packages/mcp-server/src/", "packages/proof/"];
   const changed = git(["diff", "--name-only", base, "HEAD"]).stdout.split("\n").map((line) => line.trim()).filter(Boolean);

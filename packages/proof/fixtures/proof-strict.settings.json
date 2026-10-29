@@ -18,6 +18,36 @@
       "enabled": true,
       "strictness": "strict",
       "options": {}
+    },
+    {
+      "agentId": "grammar-mechanics",
+      "enabled": false,
+      "strictness": "strict",
+      "options": {}
+    },
+    {
+      "agentId": "vocabulary-repetition",
+      "enabled": false,
+      "strictness": "strict",
+      "options": {}
+    },
+    {
+      "agentId": "style-voice",
+      "enabled": false,
+      "strictness": "strict",
+      "options": {}
+    },
+    {
+      "agentId": "character-voice",
+      "enabled": false,
+      "strictness": "strict",
+      "options": {}
+    },
+    {
+      "agentId": "period-dialect",
+      "enabled": false,
+      "strictness": "strict",
+      "options": {}
     }
   ],
   "exceptions": [],

@@ -35,6 +35,25 @@ test("one tool per registered agent plus read-only canon_list", () => {
   }
 });
 
+test("the server bundle registers the full roster: continuity plus language tools", async () => {
+  const { createLorewardensServer } = await import("../src/index.js");
+  const bundle = createLorewardensServer();
+  assert.deepEqual(
+    bundle.tools.map((t) => t.name),
+    [
+      "analyze_canon_lore",
+      "analyze_character_consistency",
+      "analyze_timeline",
+      "analyze_grammar_mechanics",
+      "analyze_vocabulary_repetition",
+      "analyze_style_voice",
+      "analyze_character_voice",
+      "analyze_period_dialect",
+      "canon_list",
+    ],
+  );
+});
+
 test("analyze at standard invokes the stub agent and returns validated empty findings with a minimal context", async () => {
   const { store } = seededStore();
   const registry = createRegistry(CONTINUITY_AGENTS);

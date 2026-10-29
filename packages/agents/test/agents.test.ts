@@ -149,8 +149,13 @@ test("all three continuity agents are exported and implement the contract", () =
       ["canon-lore", "continuity", "Canon / Lore", "standard"],
       ["character-consistency", "continuity", "Character Consistency", "standard"],
       ["timeline", "continuity", "Timeline / Chronology", "standard"],
+      ["grammar-mechanics", "language", "Grammar / Mechanics", "standard"],
+      ["vocabulary-repetition", "language", "Vocabulary / Repetition", "standard"],
+      ["style-voice", "language", "Style / Voice Consistency", "standard"],
+      ["character-voice", "language", "Character Voice", "standard"],
+      ["period-dialect", "language", "Period / Dialect / Language", "standard"],
     ],
-    "AGENT_DESCRIPTORS are unchanged",
+    "AGENT_DESCRIPTORS pin the full registered roster (continuity + language)",
   );
   assert.deepEqual(CONTINUITY_AGENTS.map((a) => a.id), ["canon-lore", "character-consistency", "timeline"]);
   for (const agent of CONTINUITY_AGENTS) {

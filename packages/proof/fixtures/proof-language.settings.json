@@ -1,0 +1,55 @@
+{
+  "projectId": "proof-language",
+  "agents": [
+    {
+      "agentId": "canon-lore",
+      "enabled": false,
+      "strictness": "standard",
+      "options": { "objectLocationChecks": false }
+    },
+    {
+      "agentId": "character-consistency",
+      "enabled": false,
+      "strictness": "standard",
+      "options": { "relationshipState": false }
+    },
+    {
+      "agentId": "timeline",
+      "enabled": false,
+      "strictness": "standard",
+      "options": {}
+    },
+    {
+      "agentId": "grammar-mechanics",
+      "enabled": true,
+      "strictness": "standard",
+      "options": {}
+    },
+    {
+      "agentId": "vocabulary-repetition",
+      "enabled": true,
+      "strictness": "standard",
+      "options": {}
+    },
+    {
+      "agentId": "style-voice",
+      "enabled": true,
+      "strictness": "standard",
+      "options": {}
+    },
+    {
+      "agentId": "character-voice",
+      "enabled": true,
+      "strictness": "standard",
+      "options": {}
+    },
+    {
+      "agentId": "period-dialect",
+      "enabled": true,
+      "strictness": "standard",
+      "options": {}
+    }
+  ],
+  "exceptions": [],
+  "dismissed": []
+}
