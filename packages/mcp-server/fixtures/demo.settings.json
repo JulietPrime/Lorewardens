@@ -1,0 +1,25 @@
+{
+  "projectId": "demo",
+  "agents": [
+    {
+      "agentId": "canon-lore",
+      "enabled": true,
+      "strictness": "standard",
+      "options": { "objectLocationChecks": false }
+    },
+    {
+      "agentId": "character-consistency",
+      "enabled": true,
+      "strictness": "standard",
+      "options": { "relationshipState": false }
+    },
+    {
+      "agentId": "timeline",
+      "enabled": true,
+      "strictness": "standard",
+      "options": {}
+    }
+  ],
+  "exceptions": [],
+  "dismissed": []
+}
