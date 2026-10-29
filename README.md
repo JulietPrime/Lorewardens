@@ -39,5 +39,6 @@ npm test
 3. `implement-three-continuity-agents` — Canon/Lore, Character Consistency, Timeline, done (deterministic lexical matchers behind the same contract; `CONTINUITY_AGENTS` replaces the stubs)
 4. `prove-agents-catch-seeded-errors` — done (seeded manuscript `packages/proof/fixtures/manuscript/ch4.md` proves standard strictness catches every seeded error through the real MCP tool path while clean passages stay silent; strictness matrix, strict-only notes, schema/offset and determinism asserted; see `packages/proof/README.md`)
 5. `make-the-demo-match-the-engine` — done (demo honesty: `packages/mcp-server/README.md` documents the three detection shapes the engine really catches, with machine-proven sample sentences and the known limits incl. the implicit-contradiction false negative)
+6. `add-the-five-language-and-prose-agents` — done (Grammar/Mechanics, Vocabulary/Repetition, Style/Voice Consistency, Character Voice, Period/Dialect/Language behind the same contract, registered via `ALL_AGENTS` as new MCP tools; every finding pin proven in the seeded `proof-language` fixture project)
 
 See `docs/architecture.md` for the component map and `docs/agent-contract.md` for the strictness semantics.

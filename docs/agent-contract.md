@@ -65,6 +65,7 @@ agents at their configured strictness.
 ## Registry
 
 `AgentRegistry` (packages/core/src/registry.ts) is roster-agnostic: 17 agents
-fit the same contract. Increment 1 registers the three Continuity agents;
-later families (Domain, Language & Prose, Narrative, Optional) implement the
+fit the same contract. Increment 2 registers the three Continuity agents and
+the five Language & Prose agents (eight total); later families (Domain,
+Narrative, Optional) implement the
 same interface and appear as new MCP tools without contract changes.

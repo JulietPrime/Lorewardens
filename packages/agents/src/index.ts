@@ -2,6 +2,11 @@ import type { AgentDescriptor, ContinuityAgent } from "@lorewardens/core";
 import { createCanonLoreAgent } from "./canon-lore.js";
 import { createCharacterConsistencyAgent } from "./character-consistency.js";
 import { createTimelineAgent } from "./timeline.js";
+import { createGrammarMechanicsAgent } from "./grammar-mechanics.js";
+import { createVocabularyRepetitionAgent } from "./vocabulary-repetition.js";
+import { createStyleVoiceAgent } from "./style-voice.js";
+import { createCharacterVoiceAgent } from "./character-voice.js";
+import { createPeriodDialectAgent } from "./period-dialect.js";
 
 export { createCanonLoreAgent, detectCanonContradictions, canonLoreFindings } from "./canon-lore.js";
 export {
@@ -10,6 +15,11 @@ export {
   detectRelationshipDrift,
 } from "./character-consistency.js";
 export { createTimelineAgent, detectTimelineIssues, timelineFindings } from "./timeline.js";
+export { grammarMechanicsFindings } from "./grammar-mechanics.js";
+export { vocabularyRepetitionFindings } from "./vocabulary-repetition.js";
+export { styleVoiceFindings } from "./style-voice.js";
+export { characterVoiceFindings } from "./character-voice.js";
+export { periodDialectFindings } from "./period-dialect.js";
 
 export const AGENT_DESCRIPTORS: AgentDescriptor[] = [
   {
@@ -51,6 +61,51 @@ export const AGENT_DESCRIPTORS: AgentDescriptor[] = [
     defaultStrictness: "standard",
     options: [],
   },
+  {
+    id: "grammar-mechanics",
+    family: "language",
+    title: "Grammar / Mechanics",
+    description:
+      "Flags clear mechanical errors — doubled words, stray whitespace before punctuation, doubled punctuation, a lowercase standalone 'i'. Clear mistakes only; never rewrites style or voice.",
+    defaultStrictness: "standard",
+    options: [],
+  },
+  {
+    id: "vocabulary-repetition",
+    family: "language",
+    title: "Vocabulary / Repetition",
+    description:
+      "Flags overused words and weak or repeated verbs as patterns, not isolated choices: a stem recurring across the passage or echoing within one sentence. Names the pattern; never suggests replacement words.",
+    defaultStrictness: "standard",
+    options: [],
+  },
+  {
+    id: "style-voice",
+    family: "language",
+    title: "Style / Voice Consistency",
+    description:
+      "Flags sudden shifts in sentence rhythm or formality that break the voice the passage itself establishes. Never imposes an external style.",
+    defaultStrictness: "standard",
+    options: [],
+  },
+  {
+    id: "character-voice",
+    family: "language",
+    title: "Character Voice",
+    description:
+      "Checks dialogue and internal thought against each character's established voice (the Character.voice canon field). Flags lines that drift from known speech patterns, such as phrases the voice canon says the character avoids.",
+    defaultStrictness: "standard",
+    options: [],
+  },
+  {
+    id: "period-dialect",
+    family: "language",
+    title: "Period / Dialect / Language",
+    description:
+      "Gated behind a confirmed period setting in canon: flags modern anachronisms and casual slang that break a pre-1900 Earth-like period, and respects intentional modern or invented language when the writer says so in canon.",
+    defaultStrictness: "standard",
+    options: [],
+  },
 ];
 
 function agentById(id: string): AgentDescriptor {
@@ -67,8 +122,30 @@ export const CHARACTER_CONSISTENCY_AGENT: ContinuityAgent = createCharacterConsi
 
 export const TIMELINE_AGENT: ContinuityAgent = createTimelineAgent(agentById("timeline"));
 
+export const GRAMMAR_MECHANICS_AGENT: ContinuityAgent = createGrammarMechanicsAgent(agentById("grammar-mechanics"));
+
+export const VOCABULARY_REPETITION_AGENT: ContinuityAgent = createVocabularyRepetitionAgent(
+  agentById("vocabulary-repetition"),
+);
+
+export const STYLE_VOICE_AGENT: ContinuityAgent = createStyleVoiceAgent(agentById("style-voice"));
+
+export const CHARACTER_VOICE_AGENT: ContinuityAgent = createCharacterVoiceAgent(agentById("character-voice"));
+
+export const PERIOD_DIALECT_AGENT: ContinuityAgent = createPeriodDialectAgent(agentById("period-dialect"));
+
 export const CONTINUITY_AGENTS: ContinuityAgent[] = [
   CANON_LORE_AGENT,
   CHARACTER_CONSISTENCY_AGENT,
   TIMELINE_AGENT,
 ];
+
+export const LANGUAGE_AGENTS: ContinuityAgent[] = [
+  GRAMMAR_MECHANICS_AGENT,
+  VOCABULARY_REPETITION_AGENT,
+  STYLE_VOICE_AGENT,
+  CHARACTER_VOICE_AGENT,
+  PERIOD_DIALECT_AGENT,
+];
+
+export const ALL_AGENTS: ContinuityAgent[] = [...CONTINUITY_AGENTS, ...LANGUAGE_AGENTS];
