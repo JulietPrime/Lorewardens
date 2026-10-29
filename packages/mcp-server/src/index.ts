@@ -2,7 +2,7 @@ import { pathToFileURL } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { createRegistry, type CanonStore } from "@lorewardens/core";
-import { CONTINUITY_AGENTS } from "@lorewardens/agents";
+import { ALL_AGENTS } from "@lorewardens/agents";
 import { defaultFixturesDir, loadFixtures } from "./store.js";
 import { buildTools, type ToolDef } from "./tools.js";
 
@@ -19,7 +19,7 @@ export interface LorewardensServerBundle {
 
 export function createLorewardensServer(fixturesDir?: string): LorewardensServerBundle {
   const { store, projectIds, skipped } = loadFixtures(fixturesDir ?? defaultFixturesDir());
-  const registry = createRegistry(CONTINUITY_AGENTS);
+  const registry = createRegistry(ALL_AGENTS);
   const tools = buildTools(registry, store);
 
   const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });

@@ -28,12 +28,21 @@
     },
     "agent": {
       "type": "string",
-      "enum": ["canon-lore", "character-consistency", "timeline"],
+      "enum": [
+        "canon-lore",
+        "character-consistency",
+        "timeline",
+        "grammar-mechanics",
+        "vocabulary-repetition",
+        "style-voice",
+        "character-voice",
+        "period-dialect"
+      ],
       "description": "The agent that produced the finding."
     },
     "category": {
       "type": "string",
-      "enum": ["canon", "character", "timeline"]
+      "enum": ["canon", "character", "timeline", "language", "prose"]
     },
     "type": {
       "type": "string",
