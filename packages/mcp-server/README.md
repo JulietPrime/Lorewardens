@@ -7,9 +7,56 @@ reports, and every canon write requires writer confirmation outside this
 server.
 
 The three continuity agents are the real deterministic lexical matchers from
-`@lorewardens/agents` (`CONTINUITY_AGENTS`). Their detection approach is
-keyword/negation/antonym-based (see `docs/agent-contract.md`); a smarter
-engine can replace the matchers later without changing the tool surface.
+`@lorewardens/agents` (`CONTINUITY_AGENTS`). A smarter engine can replace the
+matchers later without changing the tool surface (see `docs/agent-contract.md`).
+
+## What the engine catches today
+
+The matchers are deliberately simple, offline and deterministic. Between new
+text and confirmed canon entries they catch exactly three shapes of
+contradiction (all in `packages/agents/src/lexical.ts` + `canon-lore.ts`):
+
+1. **Negation-polarity conflict** — the text affirms what canon negates, or
+   negates what canon affirms, while being about the same subject.
+2. **Antonym swap** — a word in the text is a curated antonym of a word in
+   the canon entry (sealed/open, north/south, always/never, careful/careless, ...).
+3. **Numeric mismatch** — the text and the canon entry carry different
+   concrete numbers for the same unit ("9 years" vs "3 years").
+
+On top of the three shapes, two agents add their own deterministic cue
+checks: Character Consistency checks knowledge/recovery cues against
+confirmed characters (abilities, traits, injuries), and Timeline checks
+sequence cues ("before"/"after") and hedged wording ("sometime", "around
+then") between mentioned canon events.
+
+## Try these (every sample is machine-proven)
+
+Each sentence below is asserted by `test/readme-samples.test.ts`: the test
+runs the sentence through the real MCP tool path (`runAnalyzeTool`) against
+the seeded `demo` project at standard strictness and requires exactly the
+listed finding — and silence from the other agents. If the engine changes,
+the test fails before this README can over-promise.
+
+| Paste this into the `demo` project | You get |
+| --- | --- |
+| `Mira pushed through the Weeping Gate on the city wall, and found it standing open.` | `canon-lore` → `canon-contradiction` (antonym swap: canon says the gate is sealed), ref `canon_fact_weeping_gate` |
+| `The Weeping Gate is not the only gate in the city wall.` | `canon-lore` → `canon-contradiction` (negation polarity), ref `canon_fact_weeping_gate` |
+| `Daven swore the siege of the city lasted only 3 years.` | `canon-lore` → `canon-contradiction` (numeric mismatch: canon says 9 years), ref `canon_fact_siege_years` |
+| `Daven flexed his sprained wrist, which had healed nicely since the fall.` | `character-consistency` → `injury-contradiction` (recovery cue vs canon injury), ref `char_daven` |
+
+## What the engine does NOT catch today (known limits)
+
+- **Implicit / full-retention contradictions.** The flagship demo rule —
+  `canon_rule_magic_memory`, "Every spell costs the caster one personal
+  memory; the stronger the spell, the more precious the memory lost" — is
+  **not** flagged for the repro sentence:
+  "She cast the ward and remembered every detail of it afterward."
+  Remembering every detail contradicts a rule that every spell costs a
+  memory, but the sentence carries no explicit negation, antonym or numeral,
+  so today's matchers stay silent. That silence is asserted in
+  `test/readme-samples.test.ts` too, so the limit is honest in both
+  directions until the smarter matcher lands
+  (`catch-implicit-contradictions-in-matchers`).
 
 ## Run
 

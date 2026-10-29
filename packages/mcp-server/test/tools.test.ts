@@ -108,7 +108,7 @@ test("canon_list returns the seeded confirmed snapshot with status counts", asyn
   assert.equal(result.projectId, "demo");
   assert.ok(result.snapshot.entries.length >= 3);
   assert.ok(result.snapshot.characters.length >= 2);
-  assert.equal(result.counts.entries.confirmed, 2);
+  assert.equal(result.counts.entries.confirmed, 3, "includes the additive siege-duration fact");
   assert.equal(result.counts.entries.proposed, 1);
 });
 

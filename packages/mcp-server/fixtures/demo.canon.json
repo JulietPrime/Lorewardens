@@ -41,6 +41,18 @@
       "sources": [],
       "createdAt": "2026-10-29T09:00:00.000Z",
       "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_siege_years",
+      "projectId": "demo",
+      "kind": "fact",
+      "text": "The siege of the city lasted 9 years.",
+      "tags": ["siege"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
     }
   ],
   "characters": [
