@@ -43,6 +43,13 @@ const README_SAMPLES: Sample[] = [
     canonRef: "canon_fact_siege_years",
   },
   {
+    id: "implicit-full-retention",
+    text: "She cast the ward and remembered every detail of it afterward.",
+    agent: "canon-lore",
+    type: "canon-implicit-contradiction",
+    canonRef: "canon_rule_magic_memory",
+  },
+  {
     id: "character-recovery-cue",
     text: "Daven flexed his sprained wrist, which had healed nicely since the fall.",
     agent: "character-consistency",
@@ -51,11 +58,11 @@ const README_SAMPLES: Sample[] = [
   },
 ];
 
-// The known-limits repro from the README: remembering every detail after a
-// spell contradicts the locked memory-cost rule, but no explicit negation,
-// antonym or numeral is present, so today's matchers must stay silent. When
-// catch-implicit-contradictions-in-matchers lands, this row and the README
-// known-limits section change together.
+// The former known-limit repro from the README: remembering every detail
+// after a spell contradicts the locked memory-cost rule without an explicit
+// negation, antonym or numeral. Since catch-implicit-contradictions-in-matchers
+// landed, the engine flags it as a canon-implicit-contradiction; this test
+// and the README known-limits section moved together with the engine.
 const KNOWN_LIMIT_REPRO = "She cast the ward and remembered every detail of it afterward.";
 
 function sampleChunk(text: string): { text: string; file: string; startOffset: number; endOffset: number } {
@@ -118,9 +125,20 @@ test("README sample findings are deterministic across repeated runs (ids and tim
   }
 });
 
-test("the README known-limit repro stays silent until the smarter matcher lands", async () => {
+test("the former known-limit repro is now caught as an implicit contradiction", async () => {
   const results = await analyzeWithAllAgents(KNOWN_LIMIT_REPRO);
   for (const [agentId, result] of results) {
-    assert.deepEqual(result.findings, [], `${agentId} must not flag the implicit contradiction yet`);
+    if (agentId === "canon-lore") {
+      const findings = (result.findings ?? []) as Finding[];
+      assert.equal(findings.length, 1, "canon-lore flags the implicit full-retention contradiction");
+      assert.equal(findings[0].type, "canon-implicit-contradiction");
+      assert.equal(findings[0].severity, "major", "the memory rule is writer-locked");
+      assert.equal(findings[0].confidence, 0.95);
+      assert.equal(findings[0].minStrictness, "gentle");
+      assert.deepEqual(findings[0].canonRefs, ["canon_rule_magic_memory"]);
+      assert.deepEqual(validateFinding(findings[0]), [], "finding schema-valid");
+    } else {
+      assert.deepEqual(result.findings, [], `${agentId} stays silent on the repro`);
+    }
   }
 });

@@ -43,6 +43,104 @@ export const AMBIGUITY_CUES: readonly string[] = [
   "who knows when", "hard to say when",
 ];
 
+// ---------------------------------------------------------------------------
+// Implicit-contradiction cue tables (canon-lore).
+//
+// The implicit shape flags a sentence that shows a caster keeping everything
+// a confirmed cost rule says every casting costs ("She cast the ward and
+// remembered every detail of it afterward" vs "Every spell costs the caster
+// one personal memory"). It is deliberately over-gated: each table prefers
+// false negatives over false positives, and a sentence must clear ALL gates
+// (confirmed rule-kind entry with a cost cue + casting ACTION cue +
+// full-retention cue + domain link) before a finding is emitted.
+// ---------------------------------------------------------------------------
+
+/**
+ * Entry-side cost/loss cues: the rule text itself must state that casting
+ * costs or loses something. Word-boundary matched against the entry text.
+ * "takes" is the double-edged member (it also means duration) — accepted
+ * because the shape additionally requires the casting + retention + domain
+ * gates, so a duration-only rule ("takes a whole day") still needs a
+ * full-retention sentence about a linked domain to misfire.
+ */
+export const COST_CUES: readonly string[] = [
+  "cost", "costs", "price", "takes", "sacrifice", "sacrifices", "lose", "loses",
+  "forfeit", "forfeits", "surrender", "surrenders", "pays", "paid", "give up",
+  "gives up", "drains", "drain",
+];
+
+/**
+ * Sentence-side casting ACTION cues. Verbs of performing magic only: bare
+ * nouns ("spell", "magic", "ward") are deliberately NOT casting cues — that
+ * is what keeps "she remembered every detail of the spell book" silent, and
+ * what keeps simple mentions of magic objects from implying a casting.
+ * Word-boundary matched against the sentence.
+ */
+export const CASTING_CUES: readonly string[] = [
+  "cast", "casting", "casted", "wove", "weave", "weaving", "invoked", "invoke",
+  "invoking",   "channelled", "channeled", "channel", "channeling",
+  "conjured", "conjure", "conjuring", "enchanted", "enchant", "enchanting",
+  "spoke the incantation", "uttered the incantation",
+];
+
+/**
+ * Sentence-side FULL-retention cues. Each phrase asserts the caster kept
+ * everything, which is what contradicts a cost rule. Generic memory words
+ * ("remembered the map", "paid a memory") are not retention. Prefer false
+ * negatives: every member is a specific multi-word phrase.
+ */
+export const RETENTION_CUES: readonly string[] = [
+  "remembered every detail", "remembered everything", "recalled every detail",
+  "remembered all", "recalled all", "nothing was lost", "nothing is lost",
+  "kept every memory", "kept all her memories", "kept all his memories",
+  "kept every one of her memories", "kept every one of his memories",
+];
+
+/**
+ * Domain link between the casting side of a sentence and a rule's own
+ * domain words (text + tags). Keys are words that may appear in the sentence:
+ * the casting action cues AND the magic domain nouns (so "she invoked the
+ * ward" binds to a ward-specific rule even though invoke's own family is
+ * magic-only). Values are the domain families each key can bind to. The
+ * implicit shape fires only when some key present in the sentence has a
+ * family that intersects the rule's own domain words.
+ */
+export const CASTING_DOMAIN: Readonly<Record<string, readonly string[]>> = {
+  "cast": ["spell", "magic", "ward", "incantation", "ritual", "enchantment", "hex", "charm"],
+  "casting": ["spell", "magic", "ward", "incantation", "ritual", "enchantment", "hex", "charm"],
+  "casted": ["spell", "magic", "ward", "incantation", "ritual", "enchantment", "hex", "charm"],
+  "wove": ["spell", "magic", "ward", "enchantment", "charm", "weaving"],
+  "weave": ["spell", "magic", "ward", "enchantment", "charm", "weaving"],
+  "weaving": ["spell", "magic", "ward", "enchantment", "charm", "weaving"],
+  "invoked": ["magic", "ritual", "spell", "blessing"],
+  "invoke": ["magic", "ritual", "spell", "blessing"],
+  "invoking": ["magic", "ritual", "spell", "blessing"],
+  "channelled": ["magic", "power", "spell", "storm"],
+  "channeled": ["magic", "power", "spell", "storm"],
+  "channel": ["magic", "power", "spell", "storm"],
+  "channeling": ["magic", "power", "spell", "storm"],
+  "conjured": ["magic", "spell", "spirit", "creature"],
+  "conjure": ["magic", "spell", "spirit", "creature"],
+  "conjuring": ["magic", "spell", "spirit", "creature"],
+  "enchanted": ["magic", "enchantment", "object", "spell"],
+  "enchant": ["magic", "enchantment", "object", "spell"],
+  "enchanting": ["magic", "enchantment", "object", "spell"],
+  "spoke the incantation": ["incantation", "spell", "magic"],
+  "uttered the incantation": ["incantation", "spell", "magic"],
+  // Domain nouns: not casting cues on their own (see CASTING_CUES), but they
+  // carry the domain link when they co-occur with a casting action cue.
+  "ward": ["ward", "spell", "magic", "protection"],
+  "warding": ["ward", "spell", "magic", "protection"],
+  "spell": ["spell", "magic"],
+  "magic": ["magic", "spell"],
+  "incantation": ["incantation", "spell", "magic"],
+  "ritual": ["ritual", "magic", "spell"],
+  "hex": ["hex", "magic", "spell"],
+  "charm": ["charm", "magic", "spell"],
+  "enchantment": ["enchantment", "magic", "spell"],
+  "blessing": ["blessing", "magic", "spell"],
+};
+
 // Small closed-class antonym table. Deterministic and documented; extend as
 // needed. Keys are stems (see stem()).
 const ANTONYM_PAIRS: [string, string][] = [
@@ -96,6 +194,24 @@ export function contentWords(text: string): string[] {
   return tokenize(text)
     .filter((t) => !STOPWORDS.has(t) && !NEGATION_CUES.includes(t))
     .map(stem);
+}
+
+/**
+ * Content words paired with their original surface form ({ stem, word }).
+ * Same filtering as contentWords; the surface form keeps user-facing
+ * messages readable while matching stays stem-based.
+ */
+export function contentWordPairs(text: string): { stem: string; word: string }[] {
+  const seen = new Set<string>();
+  const out: { stem: string; word: string }[] = [];
+  for (const token of tokenize(text)) {
+    if (STOPWORDS.has(token) || NEGATION_CUES.includes(token)) continue;
+    const s = stem(token);
+    if (seen.has(s)) continue;
+    seen.add(s);
+    out.push({ stem: s, word: token });
+  }
+  return out;
 }
 
 export interface Sentence {
@@ -206,6 +322,55 @@ export function numericConflict(canonText: string, sentence: string): { canon: n
 /** Names a character goes by (name + aliases). */
 export function namesOf(character: Character): string[] {
   return [character.name, ...character.aliases].filter((n) => n.length > 1);
+}
+
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Word-boundary cue membership. Phrases and single words alike; the boundary
+ * keeps "cast" out of "castle" and "remembered all" out of "remembered
+ * allegiance". Deterministic and side-effect free.
+ */
+export function containsCue(text: string, cues: readonly string[]): boolean {
+  const lower = text.toLowerCase();
+  return cues.some((cue) => new RegExp(`\\b${escapeRegExp(cue)}\\b`).test(lower));
+}
+
+/**
+ * Normalized form used for verbatim agreement: lowercase, every run of
+ * non-alphanumeric characters collapsed to one space, trimmed. "City's"
+ * and "city s" normalize identically, so punctuation cannot hide or fake
+ * a restatement.
+ */
+export function normalizeText(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+export interface NumeralSpan {
+  value: number;
+  start: number; // offset within the given text
+  end: number; // exclusive
+}
+
+/**
+ * Every concrete numeral in `text` with its position: digit runs and the
+ * closed number-word table (zero..ten). Used by the numeric-conflict guard
+ * to check that a shared unit word sits adjacent to EACH numeral.
+ */
+export function numeralSpans(text: string): NumeralSpan[] {
+  const spans: NumeralSpan[] = [];
+  for (const m of text.toLowerCase().matchAll(/\b\d+\b/g)) {
+    spans.push({ value: Number(m[0]), start: m.index ?? 0, end: (m.index ?? 0) + m[0].length });
+  }
+  for (const [word, value] of NUMBER_WORDS) {
+    const re = new RegExp(`\\b${word}\\b`, "g");
+    for (const m of text.toLowerCase().matchAll(re)) {
+      spans.push({ value, start: m.index ?? 0, end: (m.index ?? 0) + word.length });
+    }
+  }
+  return spans.sort((a, b) => a.start - b.start);
 }
 
 export function firstMatchIndex(sentence: string, needles: readonly string[]): number {

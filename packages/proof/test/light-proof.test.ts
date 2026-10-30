@@ -119,7 +119,9 @@ function findingsOf(result: AnalyzeToolResult): Finding[] {
 }
 
 test("the proof fixture directory seeds all five projects without skips", () => {
-  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
+  // Standing ruling v2 (additive): proof-implicit joins in the loader's
+  // emission order (see proof.test.ts).
+  assert.deepEqual(projectIds, ["proof", "proof-implicit", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
   assert.deepEqual(skipped, []);
 });
 

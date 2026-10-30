@@ -872,7 +872,9 @@ test("acceptance: modular enablement — one disabled row silences only that age
 test("acceptance: proof-light enables exactly the trio and carries their seeded findings (ac-6)", async () => {
   const proofFixturesDir = fileURLToPath(new URL("../../../proof/fixtures", import.meta.url));
   const { store: shipped, projectIds: shippedIds, skipped: shippedSkipped } = loadFixtures(proofFixturesDir);
-  assert.deepEqual(shippedIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
+  // Standing ruling v2 (additive): proof-implicit joins in the loader's
+  // emission order (see packages/proof/test/proof.test.ts).
+  assert.deepEqual(shippedIds, ["proof", "proof-implicit", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
   assert.deepEqual(shippedSkipped, [], "no shipped fixture is skipped");
 
   const raw = JSON.parse(readFileSync(join(proofFixturesDir, "proof-light.settings.json"), "utf8")) as {

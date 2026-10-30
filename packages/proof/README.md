@@ -38,23 +38,40 @@ npm test          # repo root; builds in dependency order, includes this workspa
 
 ## Behaviors the fixtures pin (matcher cautions)
 
-These are deliberate lexical-matcher behaviors from the task-3 review. The
-fixture design depends on all of them; a matcher upgrade that changes them
-must revisit `fixtures/` and the scenario table together:
+These are the lexical-matcher behaviors the fixture design depends on. Items
+1–3 were pinned as cautions by the task-3 review and have since been fixed by
+`catch-implicit-contradictions-in-matchers`; the descriptions below state the
+FIXED behavior and why it holds. A matcher change that alters them must
+revisit `fixtures/` and the scenario table together:
 
-1. **`cueBetween` uses the first occurrence of a sequence cue.** The seeded
-   sequence sentences (E8, E9) contain their comparative cue ("before")
-   exactly once, positioned between the two event mentions. Do not seed
-   double-cue sentences.
-2. **Ambiguity cues over-trigger.** Any sentence mentioning two canon events
-   plus a hedge ("sometime", "around then", "roughly", ...) becomes an
-   `unclear-time-jump`. E10 is the only paragraph allowed to pair two
-   canon-event mentions with a hedge; clean passages never do.
-3. **Location drift keys objects by `tags[0]`.** The S1 canon entry
-   (`canon_fact_astrolabe`) has `tags[0] = "astrolabe"`, the word used in the
-   relocation sentence, and a second `LOCATION_BINDING` entry
-   (`canon_fact_harbor_ledger`) names the destination ("lighthouse"). S1's
-   paragraph is the only relocation-style sentence in the manuscript.
+1. **`cueBetween` considers every occurrence of a sequence cue inside the
+   mention window.** The seeded sequence sentences (E8, E9) still contain
+   their comparative cue ("before") exactly once, positioned between the two
+   event mentions, so their outcomes are unchanged — but a sentence whose
+   first cue occurrence falls outside the mention window and a later one
+   inside it now asserts a sequence too. Rationale: first-occurrence-only
+   matching made the assertion depend on unrelated earlier text.
+2. **Ambiguity cues are mention-gated.** An `unclear-time-jump` fires only
+   when a hedge is present, no comparative cue sits between the two event
+   mentions (a comparative there asserts an order instead), and the hedge
+   does not trail the second event mention. When the two events share a
+   participant, the first-mention indices collapse onto the shared name, so
+   the gate falls back to each event's first distinguishing keyword to build
+   the mention window. E10 ("...the harbor lanterns sometime around her
+   survey...") still fires — its hedge sits between the lanterns mention and
+   the survey mention; clean passages never pair two canon-event mentions
+   with a hedge. Rationale: any hedge anywhere in a two-event sentence used
+   to become an `unclear-time-jump`.
+3. **Location drift derives the object from the entry's own text.** The
+   object identity comes from the subject words before the binding verb
+   ("The glass astrolabe rests..." → glass/astrolabe), with `tags[0]` as
+   fallback, and the drift carries its own reason (distinct finding message)
+   instead of reusing the antonym shape. S1 still keys on the astrolabe
+   entry, whose sentence mentions "astrolabe", and the harbor-ledger entry
+   still names the destination ("lighthouse"). S1's paragraph remains the
+   only relocation-style sentence in the manuscript. Rationale: keying by
+   `tags[0]` alone and borrowing the antonym reason (`word === opposite`)
+   made drift detection fragile and its output misleading.
 4. **Context selection is participant-intersection based.**
    `selectRelevantContext` only includes a timeline event when one of its
    participants is a mentioned character, so every timeline scenario's
@@ -67,6 +84,27 @@ must revisit `fixtures/` and the scenario table together:
    the non-locked seeds sit at 0.7–0.8 so they surface only at standard and
    above, and the strict-only notes at 0.55 so they never surface below
    strict.
+
+## Chapter 5 — implicit contradictions and false-positive guards (proof-implicit)
+
+`catch-implicit-contradictions-in-matchers` adds a fourth canon-lore shape —
+`canon-implicit-contradiction` — and meaning-level false-positive guards on
+the three explicit shapes. The dedicated fixture project `proof-implicit`
+(`fixtures/proof-implicit.canon.json`, `proof-implicit.settings.json`,
+`manuscript/ch5-implicit.md`) proves both directions through `runAnalyzeTool`
+in `test/implicit-proof.test.ts`:
+
+| Assertion | Test |
+| --- | --- |
+| Owner repro FIRST ("Mira cast a powerful spell and remembered every detail of it afterward.") plus three further implicit catches (wove/invoked/channelled cue-table entries) → `canon-implicit-contradiction`, major/0.95/gentle (locked rule) | `catch table at standard` |
+| Guard firing-sides: antonym with subject anchor, negation beyond the subject anchor, numerals sharing an adjacent unit → `canon-contradiction`, minor/0.8/standard | `catch table at standard` |
+| Owner FP classes — token collision ('light in every window'), stray numeral ('1' vs '30'), negation on shared keywords ('wolves'), verbatim canon agreement, confirmed-setting co-mention — zero findings for every agent | `owner false-positive classes ... stay silent` |
+| Clean cast-only / remember-only / paid-cost / spellbook passages — zero findings | `owner false-positive classes ... stay silent` |
+| Layout: ch5 starts with the owner repro; one single-sentence paragraph per scenario | `ch5 maps every paragraph ...` |
+| Determinism: two full passes identical | `determinism: two identical ch5 passes` |
+
+The ch4 scenario table is untouched; ch5 lives in its own file and project so
+the seeded-error chapter's byte-pins stay exact.
 
 ## Out of scope here
 

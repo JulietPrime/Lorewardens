@@ -216,7 +216,11 @@ function assertFindingRow(seed: SeedRow, finding: Finding, paragraph: Manuscript
 }
 
 test("acceptance: the manuscript is exactly the documented seeded-error chapter (ac-1)", async () => {
-  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"], "fixtures seed the two increment-1 projects plus the language, narrative and optional proof projects");
+  // Standing ruling v2 (additive): the deepEqual stays exact; the new
+  // proof-implicit project from catch-implicit-contradictions-in-matchers is
+  // appended in the loader's actual emission order (proof-implicit sorts
+  // between "proof" and "proof-language").
+  assert.deepEqual(projectIds, ["proof", "proof-implicit", "proof-language", "proof-light", "proof-narrative", "proof-strict"], "fixtures seed the two increment-1 projects plus the language, narrative and optional proof projects");
   assert.deepEqual(skipped, [], "no fixture is skipped or malformed");
 
   // Byte-exact layout: every documented slot resolves to its exact sentence,
@@ -474,9 +478,11 @@ test("acceptance: proof sources are offline, dependency-clean and deterministic 
     }
   }
   const labels = scanned.map((s) => s.label).sort();
+  // Additive (standing ruling v2): the scan covers the whole proof package
+  // including the ch5 implicit-contradiction suite.
   assert.deepEqual(
     labels,
-    ["src/index.ts", "test/acceptance-seeded-errors.test.ts", "test/language-proof.test.ts", "test/light-proof.test.ts", "test/narrative-proof.test.ts", "test/proof.test.ts"],
+    ["src/index.ts", "test/acceptance-seeded-errors.test.ts", "test/implicit-proof.test.ts", "test/language-proof.test.ts", "test/light-proof.test.ts", "test/narrative-proof.test.ts", "test/proof.test.ts"],
     "the offline scan covers the whole proof package",
   );
 

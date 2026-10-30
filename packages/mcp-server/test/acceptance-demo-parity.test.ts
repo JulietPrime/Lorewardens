@@ -77,6 +77,7 @@ const SHAPES = [
   { key: "negation-polarity", heading: "Negation-polarity conflict", detailRe: /negation polarity/i },
   { key: "antonym-swap", heading: "Antonym swap", detailRe: /antonym swap/i },
   { key: "numeric-mismatch", heading: "Numeric mismatch", detailRe: /numeric mismatch/i },
+  { key: "implicit-full-retention", heading: "Implicit full-retention contradiction", detailRe: /implicit full-retention/i },
 ] as const;
 
 function git(args: string[]): { status: number; stdout: string; stderr: string } {
@@ -156,7 +157,7 @@ test("acceptance: README documents the three detection shapes, each tied to one 
 test("acceptance: every README try-this sample produces exactly its documented finding at standard through runAnalyzeTool (ac-2, ac-4)", async () => {
   const sentences = SAMPLES.map((sample) => sample.sentence);
   assert.equal(new Set(sentences).size, sentences.length, "try-this samples are distinct sentences");
-  assert.equal(sentences.length, 4, "three shapes plus one character cue check are demonstrated");
+  assert.equal(sentences.length, 5, "four shapes plus one character cue check are demonstrated");
   for (const sample of SAMPLES) {
     const results = await analyzeWithAllAgents(sample.sentence);
     for (const [agentId, result] of results) {
@@ -183,36 +184,53 @@ test("acceptance: every README try-this sample produces exactly its documented f
   }
 });
 
-test("acceptance: README states the known limit — implicit/full-retention contradictions are not caught today (ac-3)", () => {
+test("acceptance: README documents the implicit full-retention shape as caught, not as a known limit (ac-3)", () => {
+  // The former known limit moved into the catch list when
+  // catch-implicit-contradictions-in-matchers landed: the shape is documented
+  // under "What the engine catches today", the repro is a machine-proven
+  // try-this row, and the known-limits section no longer quotes it.
   assert.ok(
-    /implicit/i.test(KNOWN_LIMITS_SECTION) && /full-retention/i.test(KNOWN_LIMITS_SECTION),
-    "known-limits section names implicit/full-retention contradictions",
+    CATCHES_SECTION.includes("Implicit full-retention contradiction"),
+    "'What the engine catches today' documents the implicit full-retention shape",
   );
   assert.ok(
-    /does not catch today/i.test(KNOWN_LIMITS_SECTION) && /\*\*not\*\* flagged/i.test(KNOWN_LIMITS_SECTION),
-    "known-limits section states the limit is about what the engine does not catch",
-  );
-  assert.ok(
-    KNOWN_LIMITS_SECTION.includes("canon_rule_magic_memory"),
-    "known-limits section names the flagship memory rule",
-  );
-  assert.ok(
-    KNOWN_LIMITS_SECTION.includes(KNOWN_LIMIT_REPRO),
-    "known-limits section quotes the exact remembered-every-detail repro sentence",
+    CATCHES_SECTION.includes("canon_rule_magic_memory") || CATCHES_SECTION.includes("remembered every detail"),
+    "the catches section carries the implicit shape's concrete example",
   );
   const tryThisSection = readSection(README, "## Try these");
   assert.ok(
-    !tryThisSection.includes(KNOWN_LIMIT_REPRO),
-    "the known-limit repro is never offered as a catchable try-this sample",
+    tryThisSection.includes(KNOWN_LIMIT_REPRO),
+    "the repro is offered as a catchable try-this sample",
+  );
+  assert.ok(
+    !KNOWN_LIMITS_SECTION.includes(KNOWN_LIMIT_REPRO),
+    "the known-limits section no longer quotes the repro as uncaught",
+  );
+  assert.ok(
+    !/\*\*not\*\* flagged/.test(KNOWN_LIMITS_SECTION),
+    "the known-limits section no longer claims the implicit shape is unflagged",
+  );
+  assert.ok(
+    /implicit/i.test(KNOWN_LIMITS_SECTION),
+    "the known-limits section stays honest about what remains uncaught beyond the cue tables",
   );
 });
 
-test("acceptance: the known-limit repro stays silent across all three agents today (ac-3, behavioral half)", async () => {
+test("acceptance: the former known-limit repro is caught as an implicit contradiction across all agents (ac-3, behavioral half)", async () => {
   const results = await analyzeWithAllAgents(KNOWN_LIMIT_REPRO);
   assert.equal(results.size, CONTINUITY_AGENTS.length, "all three agents were run");
   for (const [agentId, result] of results) {
     assert.equal(result.invoked, true, `${agentId} invoked`);
-    assert.equal(result.findings?.length, 0, `${agentId} must not flag the implicit contradiction yet`);
+    if (agentId === "canon-lore") {
+      const findings = (result.findings ?? []) as Finding[];
+      assert.equal(findings.length, 1, "canon-lore flags the implicit full-retention contradiction");
+      assert.equal(findings[0].type, "canon-implicit-contradiction");
+      assert.equal(findings[0].severity, "major", "the memory rule is writer-locked");
+      assert.ok(findings[0].canonRefs.includes("canon_rule_magic_memory"));
+      assert.deepEqual(validateFinding(findings[0]), [], "finding schema-validates");
+    } else {
+      assert.equal(result.findings?.length, 0, `${agentId} stays silent on the repro`);
+    }
   }
 });
 
