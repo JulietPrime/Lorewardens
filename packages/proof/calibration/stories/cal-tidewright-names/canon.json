@@ -1,0 +1,54 @@
+{
+  "projectId": "cal-tidewright-names",
+  "entries": [
+    {
+      "id": "canon_rule_pov_tamsin",
+      "projectId": "cal-tidewright-names",
+      "kind": "rule",
+      "text": "The story is told from Tamsin's point of view.",
+      "tags": ["pov"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    }
+  ],
+  "characters": [
+    {
+      "id": "char_tamsin",
+      "projectId": "cal-tidewright-names",
+      "name": "Tamsin",
+      "aliases": [],
+      "summary": "Tidewright of the harbor station; keeps the morning tally.",
+      "traits": [],
+      "abilities": [],
+      "injuries": [],
+      "goals": ["a clean roster"],
+      "relationships": [],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "char_rhonan",
+      "projectId": "cal-tidewright-names",
+      "name": "Rhonan",
+      "aliases": [],
+      "summary": "The pier warden who counts keels and says little.",
+      "traits": [],
+      "abilities": [],
+      "injuries": [],
+      "goals": [],
+      "relationships": [],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    }
+  ],
+  "events": []
+}

@@ -1,0 +1,59 @@
+{
+  "projectId": "cal-veiled-cost",
+  "story": "story.md",
+  "seeds": [
+    {
+      "id": "s1",
+      "class": "implicit-contradiction",
+      "kind": "catch",
+      "paragraph": 2,
+      "agent": "canon-lore",
+      "expect": {
+        "agent": "canon-lore",
+        "category": "canon",
+        "type": "canon-implicit-contradiction",
+        "severity": "major",
+        "confidence": 0.95,
+        "minStrictness": "gentle",
+        "canonRefs": [
+          "canon_rule_veiled_cost"
+        ],
+        "message": "Possible contradiction with confirmed canon ('Every spell costs the caster one personal memory; the stronger the spell, the more precious the memory lost.'): it shows the caster keeping everything ('kept every memory') while the rule says every casting costs. The canon entry is writer-locked, so this contradiction is serious.",
+        "quote": "Isolde wove the warding circle at dusk and kept every memory she had.",
+        "startOffset": 155,
+        "endOffset": 224,
+        "suggestion": "Canon proposal (advisory): if the new text is intended, file a CanonProposal to update or retire entry 'canon_rule_veiled_cost'; otherwise revise the passage to match canon: \"Every spell costs the caster one personal memory; the stronger the spell, the more precious the memory lost.\"."
+      }
+    },
+    {
+      "id": "s2",
+      "class": "implicit-contradiction",
+      "kind": "catch",
+      "paragraph": 6,
+      "agent": "canon-lore",
+      "expect": {
+        "agent": "canon-lore",
+        "category": "canon",
+        "type": "canon-implicit-contradiction",
+        "severity": "major",
+        "confidence": 0.95,
+        "minStrictness": "gentle",
+        "canonRefs": [
+          "canon_rule_veiled_cost"
+        ],
+        "message": "Possible contradiction with confirmed canon ('Every spell costs the caster one personal memory; the stronger the spell, the more precious the memory lost.'): it shows the caster keeping everything ('recalled every detail') while the rule says every casting costs. The canon entry is writer-locked, so this contradiction is serious.",
+        "quote": "Brann claimed he had invoked the old rite at midsummer and recalled every detail of the working.",
+        "startOffset": 514,
+        "endOffset": 610,
+        "suggestion": "Canon proposal (advisory): if the new text is intended, file a CanonProposal to update or retire entry 'canon_rule_veiled_cost'; otherwise revise the passage to match canon: \"Every spell costs the caster one personal memory; the stronger the spell, the more precious the memory lost.\"."
+      }
+    }
+  ],
+  "cleanPassages": [
+    1,
+    3,
+    4,
+    5,
+    7
+  ]
+}

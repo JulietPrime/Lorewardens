@@ -1,0 +1,59 @@
+{
+  "projectId": "cal-tidewright-names",
+  "story": "story.md",
+  "seeds": [
+    {
+      "id": "s1",
+      "class": "name-variant",
+      "kind": "catch",
+      "paragraph": 2,
+      "agent": "character-consistency",
+      "note": "Insertion variant 'Tamsine' (restricted Damerau-Levenshtein distance exactly 1 from canon 'Tamsin'). The flagger is stateless: every variant occurrence flags.",
+      "expect": {
+        "agent": "character-consistency",
+        "category": "character",
+        "type": "name-variant-drift",
+        "severity": "minor",
+        "confidence": 0.72,
+        "minStrictness": "standard",
+        "canonRefs": ["char_tamsin"],
+        "message": "Passage spells Tamsin as 'Tamsine' (canon: 'Tamsin').",
+        "quote": "The harbormaster's clerk had written Tamsine on the duty roster, and no one had corrected the ink.",
+        "startOffset": 89,
+        "endOffset": 187,
+        "suggestion": "Character proposal (advisory): align the passage with the canon spelling, or lock the variant as an alias of Tamsin if it is deliberate."
+      }
+    },
+    {
+      "id": "s2",
+      "class": "name-variant",
+      "kind": "catch",
+      "paragraph": 4,
+      "agent": "character-consistency",
+      "note": "Substitution variant 'Tamzin' (distance exactly 1 from canon 'Tamsin'). A second, independent occurrence in a different paragraph pins the stateless per-occurrence behavior.",
+      "expect": {
+        "agent": "character-consistency",
+        "category": "character",
+        "type": "name-variant-drift",
+        "severity": "minor",
+        "confidence": 0.72,
+        "minStrictness": "standard",
+        "canonRefs": ["char_tamsin"],
+        "message": "Passage spells Tamsin as 'Tamzin' (canon: 'Tamsin').",
+        "quote": "The tally sheet itself read Tamzin, in the tidy hand of the station master.",
+        "startOffset": 263,
+        "endOffset": 338,
+        "suggestion": "Character proposal (advisory): align the passage with the canon spelling, or lock the variant as an alias of Tamsin if it is deliberate."
+      }
+    },
+    {
+      "id": "s3",
+      "class": "pov-thought-tags",
+      "kind": "fp-guard",
+      "paragraph": 6,
+      "agent": "pov-consistency",
+      "note": "A single thought-tagged narration sentence ('wondered') attributing inner state to Tamsin, the declared POV character of canon_rule_pov_tamsin. Thought-tag attribution resolves to the named subject: the focal character's own interiority is not a head-hop and must stay silent."
+    }
+  ],
+  "cleanPassages": [1, 3, 5, 7, 8, 9]
+}

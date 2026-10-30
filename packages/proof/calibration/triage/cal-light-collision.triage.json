@@ -1,0 +1,29 @@
+{
+  "storyId": "cal-light-collision",
+  "triagedAt": "2026-10-30T00:00:00.000Z",
+  "triagedBy": "builder",
+  "disclosure": {
+    "content": "Original repo-owned content. The story, canon fixture and seeds were authored for this calibration corpus by the builder agent; no text, character, place or event is taken from Wolves of the Revolution or any owner manuscript. The seeded classes re-create the owner's documented false-positive SHAPES (token collisions, negation on shared keywords, verbatim agreement) as new fantasy-neutral prose.",
+    "offline": "Fully offline; no external sources were consulted during authoring."
+  },
+  "items": [
+    {
+      "ref": "s1",
+      "verdict": "tp",
+      "note": "fp-guard verified in the builder's initial run: the verbatim restatement inside a negated frame stays silent for every enabled agent at gentle, standard and strict.",
+      "action": "Keep as guard. Re-triage if a matcher change alters verbatim-agreement precedence."
+    },
+    {
+      "ref": "s2",
+      "verdict": "tp",
+      "note": "fp-guard verified in the builder's initial run: light/window/dark collision prose stays silent at every level; the antonym subject-anchor guard is doing the work.",
+      "action": "Keep as guard. This is the regression pin for the owner's light-token FP class."
+    },
+    {
+      "ref": "s3",
+      "verdict": "tp",
+      "note": "fp-guard verified in the builder's initial run: negation over subject-anchor-only overlap stays silent at every level; the shared-words-beyond-anchor guard is doing the work.",
+      "action": "Keep as guard. This is the regression pin for the wolves-negation FP class."
+    }
+  ]
+}

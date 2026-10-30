@@ -1,0 +1,20 @@
+{
+  "projectId": "cal-veiled-cost",
+  "entries": [
+    {
+      "id": "canon_rule_veiled_cost",
+      "projectId": "cal-veiled-cost",
+      "kind": "rule",
+      "text": "Every spell costs the caster one personal memory; the stronger the spell, the more precious the memory lost.",
+      "tags": ["magic", "memory"],
+      "status": "confirmed",
+      "locked": true,
+      "lockReason": "Core premise of the calibration story; the writer locked this rule.",
+      "sources": [],
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    }
+  ],
+  "characters": [],
+  "events": []
+}

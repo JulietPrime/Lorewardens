@@ -479,10 +479,11 @@ test("acceptance: proof sources are offline, dependency-clean and deterministic 
   }
   const labels = scanned.map((s) => s.label).sort();
   // Additive (standing ruling v2): the scan covers the whole proof package
-  // including the ch5 implicit-contradiction suite.
+  // including the ch5 implicit-contradiction suite and the calibration
+  // corpus runner.
   assert.deepEqual(
     labels,
-    ["src/index.ts", "test/acceptance-seeded-errors.test.ts", "test/implicit-proof.test.ts", "test/language-proof.test.ts", "test/light-proof.test.ts", "test/narrative-proof.test.ts", "test/proof.test.ts"],
+    ["src/index.ts", "test/acceptance-seeded-errors.test.ts", "test/calibration-corpus.test.ts", "test/implicit-proof.test.ts", "test/language-proof.test.ts", "test/light-proof.test.ts", "test/narrative-proof.test.ts", "test/proof.test.ts"],
     "the offline scan covers the whole proof package",
   );
 

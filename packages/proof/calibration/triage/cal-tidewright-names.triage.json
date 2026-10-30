@@ -1,0 +1,29 @@
+{
+  "storyId": "cal-tidewright-names",
+  "triagedAt": "2026-10-30T00:00:00.000Z",
+  "triagedBy": "builder",
+  "disclosure": {
+    "content": "Original repo-owned content. The story, canon fixture and seeds were authored for this calibration corpus by the builder agent; no text, character, place or event is taken from Wolves of the Revolution or any owner manuscript. Tamsin and Rhonan are invented for this corpus.",
+    "offline": "Fully offline; no external sources were consulted during authoring."
+  },
+  "items": [
+    {
+      "ref": "s1",
+      "verdict": "tp",
+      "note": "catch verified in the builder's initial run: the 'Tamsine' insertion variant surfaces exactly one name-variant-drift row at standard and strict (silent at gentle, below the 0.9 confidence floor), matching the manifest expect block field for field.",
+      "action": "Keep as catch. Pins the stateless name-variant flagger landed at develop 62f303e."
+    },
+    {
+      "ref": "s2",
+      "verdict": "tp",
+      "note": "catch verified in the builder's initial run: the 'Tamzin' substitution variant in a different paragraph surfaces its own row, matching the manifest expect block field for field.",
+      "action": "Keep as catch. Second occurrence pins per-occurrence (stateless) flagging."
+    },
+    {
+      "ref": "s3",
+      "verdict": "tp",
+      "note": "fp-guard verified in the builder's initial run: the thought-tagged sentence about the declared POV character stays silent for every enabled agent at every level.",
+      "action": "Keep as guard. Regression pin for thought-tag attribution resolving to the named subject."
+    }
+  ]
+}

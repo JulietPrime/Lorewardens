@@ -111,3 +111,15 @@ the seeded-error chapter's byte-pins stay exact.
 Any change to agent or core behavior. If a seeded error cannot be caught
 without touching the matchers, that is a stop-and-report condition, not a
 fixture hack (see the builder prompt for `prove-agents-catch-seeded-errors`).
+
+## Calibration corpus (standing)
+
+`calibration/` is the standing, growing library of repo-owned purpose-built
+stories run through the agents as ongoing calibration: triaged findings
+become permanent regression fixtures (`catch` / `fp-guard` / `miss` seeds +
+`cleanPassages` per `manifest.json`), and the data-driven runner in
+`test/calibration-corpus.test.ts` enforces every manifest as part of root
+`npm test`. Unlike the fixtures above, the corpus is additive by design: a
+new story is a new directory, and existing stories are never edited except by
+the conversion rules in `docs/calibration.md` (the deep triage workflow lives
+there). See `calibration/README.md` for the layout.

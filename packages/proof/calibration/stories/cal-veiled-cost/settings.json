@@ -1,0 +1,21 @@
+{
+  "projectId": "cal-veiled-cost",
+  "agents": [
+    { "agentId": "canon-lore", "enabled": true, "strictness": "standard", "options": { "objectLocationChecks": false } },
+    { "agentId": "character-consistency", "enabled": true, "strictness": "standard", "options": { "relationshipState": false } },
+    { "agentId": "timeline", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "grammar-mechanics", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "vocabulary-repetition", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "style-voice", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "character-voice", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "period-dialect", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "plot-thread", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "pacing-tension", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "pov-consistency", "enabled": true, "strictness": "standard", "options": {} },
+    { "agentId": "show-vs-tell", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "sensitivity-representation", "enabled": false, "strictness": "standard", "options": {} },
+    { "agentId": "theme-motif", "enabled": false, "strictness": "standard", "options": {} }
+  ],
+  "exceptions": [],
+  "dismissed": []
+}

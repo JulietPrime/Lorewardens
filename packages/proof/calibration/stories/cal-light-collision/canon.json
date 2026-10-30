@@ -1,0 +1,43 @@
+{
+  "projectId": "cal-light-collision",
+  "entries": [
+    {
+      "id": "canon_fact_vesperhall_blackout",
+      "projectId": "cal-light-collision",
+      "kind": "fact",
+      "text": "The capital goes dark for the great blackout; no light shows from any window.",
+      "tags": ["blackout", "light"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_wolf_winter",
+      "projectId": "cal-light-collision",
+      "kind": "fact",
+      "text": "North wolves wear winter coats and hunt in packs.",
+      "tags": ["wolves"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_curfew_gate",
+      "projectId": "cal-light-collision",
+      "kind": "fact",
+      "text": "The Curfew Gate is the only gate in Vesperhall's north wall, and it has been sealed since the siege.",
+      "tags": ["gate", "curfew"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    }
+  ],
+  "characters": [],
+  "events": []
+}
