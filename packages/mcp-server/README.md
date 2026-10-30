@@ -13,7 +13,7 @@ matchers later without changing the tool surface (see `docs/agent-contract.md`).
 ## What the engine catches today
 
 The matchers are deliberately simple, offline and deterministic. Between new
-text and confirmed canon entries they catch exactly three shapes of
+text and confirmed canon entries they catch exactly four shapes of
 contradiction (all in `packages/agents/src/lexical.ts` + `canon-lore.ts`):
 
 1. **Negation-polarity conflict** — the text affirms what canon negates, or
@@ -22,8 +22,16 @@ contradiction (all in `packages/agents/src/lexical.ts` + `canon-lore.ts`):
    the canon entry (sealed/open, north/south, always/never, careful/careless, ...).
 3. **Numeric mismatch** — the text and the canon entry carry different
    concrete numbers for the same unit ("9 years" vs "3 years").
+4. **Implicit full-retention contradiction** — the passage shows a caster
+   keeping everything a confirmed cost rule says every casting costs
+   ("remembered every detail of it afterward" after a casting action). The
+   shape is eligibility-gated within one sentence: a confirmed rule-kind
+   entry whose text states a cost, a casting action cue, a full-retention
+   cue, and a domain link between the casting cue and the rule's own domain
+   words. Clean prose that only casts, only remembers, pays the cost, or
+   remembers a non-magic object stays silent.
 
-On top of the three shapes, two agents add their own deterministic cue
+On top of the four shapes, two agents add their own deterministic cue
 checks: Character Consistency checks knowledge/recovery cues against
 confirmed characters (abilities, traits, injuries), and Timeline checks
 sequence cues ("before"/"after") and hedged wording ("sometime", "around
@@ -42,21 +50,17 @@ the test fails before this README can over-promise.
 | `Mira pushed through the Weeping Gate on the city wall, and found it standing open.` | `canon-lore` → `canon-contradiction` (antonym swap: canon says the gate is sealed), ref `canon_fact_weeping_gate` |
 | `The Weeping Gate is not the only gate in the city wall.` | `canon-lore` → `canon-contradiction` (negation polarity), ref `canon_fact_weeping_gate` |
 | `Daven swore the siege of the city lasted only 3 years.` | `canon-lore` → `canon-contradiction` (numeric mismatch: canon says 9 years), ref `canon_fact_siege_years` |
+| `She cast the ward and remembered every detail of it afterward.` | `canon-lore` → `canon-implicit-contradiction` (implicit full-retention: the locked rule says every spell costs a memory), ref `canon_rule_magic_memory` |
 | `Daven flexed his sprained wrist, which had healed nicely since the fall.` | `character-consistency` → `injury-contradiction` (recovery cue vs canon injury), ref `char_daven` |
 
 ## What the engine does NOT catch today (known limits)
 
-- **Implicit / full-retention contradictions.** The flagship demo rule —
-  `canon_rule_magic_memory`, "Every spell costs the caster one personal
-  memory; the stronger the spell, the more precious the memory lost" — is
-  **not** flagged for the repro sentence:
-  "She cast the ward and remembered every detail of it afterward."
-  Remembering every detail contradicts a rule that every spell costs a
-  memory, but the sentence carries no explicit negation, antonym or numeral,
-  so today's matchers stay silent. That silence is asserted in
-  `test/readme-samples.test.ts` too, so the limit is honest in both
-  directions until the smarter matcher lands
-  (`catch-implicit-contradictions-in-matchers`).
+- **Implied contradictions beyond the full-retention shape.** The implicit
+  matcher (shape 4 above) catches castings whose full retention contradicts
+  a confirmed cost rule. Broader implied contradictions — irony, subtext,
+  between-the-lines conflicts that use none of the cue tables — remain
+  uncaught; a smarter engine can replace the matchers later (see
+  `docs/agent-contract.md`).
 
 ## Run
 

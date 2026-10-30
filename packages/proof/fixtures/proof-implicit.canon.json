@@ -1,0 +1,92 @@
+{
+  "projectId": "proof-implicit",
+  "entries": [
+    {
+      "id": "canon_rule_magic_memory",
+      "projectId": "proof-implicit",
+      "kind": "rule",
+      "text": "Every spell costs the caster one personal memory; the stronger the spell, the more precious the memory lost.",
+      "tags": ["magic", "cost"],
+      "status": "confirmed",
+      "locked": true,
+      "lockReason": "Core premise of the novel; the writer has locked this rule.",
+      "sources": [
+        { "file": "proof-implicit/ch1.md", "startOffset": 210, "endOffset": 318, "line": 12 }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_blackout",
+      "projectId": "proof-implicit",
+      "kind": "fact",
+      "text": "The capital goes dark during the great blackout; no light shows in any window.",
+      "tags": ["blackout"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        { "file": "proof-implicit/ch2.md", "startOffset": 88, "endOffset": 168, "line": 5 }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_north_wolves",
+      "projectId": "proof-implicit",
+      "kind": "fact",
+      "text": "The north wolves grow winter coats and hunt in packs.",
+      "tags": ["wolves"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        { "file": "proof-implicit/ch2.md", "startOffset": 200, "endOffset": 253, "line": 9 }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_bridge_watch",
+      "projectId": "proof-implicit",
+      "kind": "fact",
+      "text": "The bridge watch changes at 30 past each hour.",
+      "tags": ["bridge"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        { "file": "proof-implicit/ch3.md", "startOffset": 402, "endOffset": 448, "line": 21 }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_weeping_gate",
+      "projectId": "proof-implicit",
+      "kind": "fact",
+      "text": "The Weeping Gate is the only gate in the city's north wall, and it is sealed since the siege.",
+      "tags": ["gate", "weeping", "city", "wall"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        { "file": "proof-implicit/ch2.md", "startOffset": 300, "endOffset": 394, "line": 13 }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_fact_lighthouse",
+      "projectId": "proof-implicit",
+      "kind": "setting",
+      "text": "The lighthouse keeper keeps the lamp room bright, and the stair below stays dark.",
+      "tags": ["lighthouse"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [
+        { "file": "proof-implicit/ch3.md", "startOffset": 610, "endOffset": 691, "line": 33 }
+      ],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "characters": [],
+  "events": []
+}

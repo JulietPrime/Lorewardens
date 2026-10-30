@@ -122,7 +122,11 @@ function findingsOf(entries: PassEntry[]): { entry: PassEntry; finding: Finding 
 }
 
 test("proof fixtures seed the two increment-1 projects plus proof-language", () => {
-  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
+  // Standing ruling v2 (additive): the deepEqual stays exact; the new
+  // proof-implicit project from catch-implicit-contradictions-in-matchers is
+  // appended in the loader's actual emission order (proof-implicit sorts
+  // between "proof" and "proof-language").
+  assert.deepEqual(projectIds, ["proof", "proof-implicit", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
   assert.deepEqual(skipped, [], "no fixture is skipped or malformed");
 });
 

@@ -658,7 +658,9 @@ test("acceptance: the fixture project runs only the language roster; the continu
 test("acceptance: the shipped increment-1 proof projects keep the language roster explicitly disabled (ac-6)", async () => {
   const proofFixturesDir = fileURLToPath(new URL("../../../proof/fixtures", import.meta.url));
   const { store: shipped, projectIds: shippedIds, skipped: shippedSkipped } = loadFixtures(proofFixturesDir);
-  assert.deepEqual(shippedIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
+  // Standing ruling v2 (additive): proof-implicit joins in the loader's
+  // emission order (see packages/proof/test/proof.test.ts).
+  assert.deepEqual(shippedIds, ["proof", "proof-implicit", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
   assert.deepEqual(shippedSkipped, [], "no shipped fixture is skipped");
   for (const projectId of ["proof", "proof-strict"]) {
     const raw = JSON.parse(readFileSync(join(proofFixturesDir, `${projectId}.settings.json`), "utf8")) as {

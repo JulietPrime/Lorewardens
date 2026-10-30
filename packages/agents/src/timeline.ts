@@ -81,14 +81,53 @@ export function firstMentionIndex(sentence: string, ref: EventRef): number {
   return Math.min(byName, byKeyword);
 }
 
+/**
+ * True when ANY occurrence of some cue lies fully inside [from, to] (caution
+ * fix: every occurrence is considered, not just the first — a sentence whose
+ * first "after" sits outside the mention window but whose second one sits
+ * inside it still asserts a sequence).
+ */
 function cueBetween(sentence: string, cues: readonly string[], from: number, to: number): boolean {
   const lower = sentence.toLowerCase();
   const lo = Math.min(from, to);
   const hi = Math.max(from, to);
   return cues.some((cue) => {
-    const idx = lower.indexOf(cue);
-    return idx >= lo && idx + cue.length <= hi;
+    let idx = lower.indexOf(cue);
+    while (idx !== -1) {
+      if (idx >= lo && idx + cue.length <= hi) return true;
+      idx = lower.indexOf(cue, idx + 1);
+    }
+    return false;
   });
+}
+
+/**
+ * Position of an ambiguity cue in the sentence (first occurrence of any cue),
+ * or -1. Positions let the ambiguity gate require the hedge to sit inside the
+ * mention window instead of anywhere in the sentence.
+ */
+function ambiguityCuePosition(sentence: string, cues: readonly string[]): number {
+  const lower = sentence.toLowerCase();
+  let best = -1;
+  for (const cue of cues) {
+    const idx = lower.indexOf(cue);
+    if (idx !== -1 && (best === -1 || idx < best)) best = idx;
+  }
+  return best;
+}
+
+/**
+ * First index of a keyword that DISTINGUISHES this event from the other one
+ * (not shared between the two keyword sets). When the two events share a
+ * participant, their first-mention indices collapse onto that shared name
+ * (documented limitation); the distinguishing keyword restores a usable
+ * mention window for the ambiguity gate.
+ */
+function distinguishingMentionIndex(sentence: string, ref: EventRef, other: EventRef): number {
+  const shared = new Set(ref.keywords.filter((keyword) => other.keywords.includes(keyword)));
+  const own = ref.keywords.filter((keyword) => !shared.has(keyword));
+  const idx = firstMatchIndex(sentence, own);
+  return idx !== -1 ? idx : firstMentionIndex(sentence, ref);
 }
 
 interface SequenceDetection {
@@ -106,7 +145,11 @@ export interface TimelineDetections {
 /**
  * Deterministic sequence checks against confirmed timeline events: comparative
  * cues ("before"/"after") between two event mentions are compared with canon
- * order; hedged sequencing of two events is flagged as ambiguous.
+ * order; hedged sequencing of two events is flagged as ambiguous only when
+ * the hedge belongs to the mention pair (it does not trail the second event
+ * mention) and no comparative cue sits between the two mentions — a
+ * comparative there asserts an order instead (caution fixes: every cue
+ * occurrence counts, and hedges no longer fire from anywhere in the sentence).
  */
 export function detectTimelineIssues(chunkText: string, context: CanonContext): TimelineDetections {
   const refs = buildRefs(context);
@@ -123,45 +166,78 @@ export function detectTimelineIssues(chunkText: string, context: CanonContext): 
     if (mentioned.length < 2) continue;
     const [a, b] = mentioned;
 
-    if (AMBIGUITY_CUES.some((cue) => sentence.text.toLowerCase().includes(cue))) {
-      const key = `amb:${a.event.id}|${b.event.id}`;
-      if (!seenPairs.has(key)) {
-        seenPairs.add(key);
-        ambiguities.push({ first: a, second: b, sentence });
+    const idxA = firstMentionIndex(sentence.text, a);
+    const idxB = firstMentionIndex(sentence.text, b);
+    const collapsed = idxA === -1 || idxB === -1 || idxA === idxB;
+
+    // Mention window for the pair. First-mentions when they differ; when they
+    // collapse onto a shared participant name, fall back to each event's first
+    // distinguishing keyword so the window spans the two actual mentions.
+    let windowLo = -1;
+    let windowHi = -1;
+    if (!collapsed) {
+      windowLo = Math.min(idxA, idxB);
+      windowHi = Math.max(idxA, idxB);
+    } else {
+      const dA = distinguishingMentionIndex(sentence.text, a, b);
+      const dB = distinguishingMentionIndex(sentence.text, b, a);
+      if (dA !== -1 && dB !== -1 && dA !== dB) {
+        windowLo = Math.min(dA, dB);
+        windowHi = Math.max(dA, dB);
       }
+    }
+
+    // A comparative cue between the two mentions asserts a positional
+    // reading: "p ... before ... q" => p precedes q; "p ... after ... q" =>
+    // q precedes p. This wins over any hedge elsewhere in the sentence.
+    const comparative =
+      windowLo !== -1 &&
+      (cueBetween(sentence.text, SEQUENCE_CUES_BEFORE, windowLo, windowHi) ||
+        cueBetween(sentence.text, SEQUENCE_CUES_AFTER, windowLo, windowHi));
+
+    if (comparative && !collapsed) {
+      // A comparative cue between two mentions asserts the positional reading:
+      // "p ... before ... q" => p precedes q; "p ... after ... q" => q precedes p.
+      const [p, q] = idxA < idxB ? [a, b] : [b, a];
+      let assertedPQ: boolean | undefined;
+      if (cueBetween(sentence.text, SEQUENCE_CUES_BEFORE, idxA, idxB)) assertedPQ = true;
+      else if (cueBetween(sentence.text, SEQUENCE_CUES_AFTER, idxA, idxB)) assertedPQ = false;
+      if (assertedPQ === undefined) continue;
+
+      // Canonicalize the pair by canon order so findings are deterministic.
+      let first: EventRef;
+      let second: EventRef;
+      let assertedFirstPrecedes: boolean;
+      if (p.event.order <= q.event.order) {
+        first = p;
+        second = q;
+        assertedFirstPrecedes = assertedPQ;
+      } else {
+        first = q;
+        second = p;
+        assertedFirstPrecedes = !assertedPQ;
+      }
+
+      const key = `seq:${first.event.id}|${second.event.id}`;
+      if (seenPairs.has(key)) continue;
+      seenPairs.add(key);
+      contradictions.push({ first, second, assertedFirstPrecedes, sentence });
       continue;
     }
 
-    const idxA = firstMentionIndex(sentence.text, a);
-    const idxB = firstMentionIndex(sentence.text, b);
-    if (idxA === -1 || idxB === -1 || idxA === idxB) continue;
-
-    // A comparative cue between two mentions asserts the positional reading:
-    // "p ... before ... q" => p precedes q; "p ... after ... q" => q precedes p.
-    const [p, q] = idxA < idxB ? [a, b] : [b, a];
-    let assertedPQ: boolean | undefined;
-    if (cueBetween(sentence.text, SEQUENCE_CUES_BEFORE, idxA, idxB)) assertedPQ = true;
-    else if (cueBetween(sentence.text, SEQUENCE_CUES_AFTER, idxA, idxB)) assertedPQ = false;
-    if (assertedPQ === undefined) continue;
-
-    // Canonicalize the pair by canon order so findings are deterministic.
-    let first: EventRef;
-    let second: EventRef;
-    let assertedFirstPrecedes: boolean;
-    if (p.event.order <= q.event.order) {
-      first = p;
-      second = q;
-      assertedFirstPrecedes = assertedPQ;
-    } else {
-      first = q;
-      second = p;
-      assertedFirstPrecedes = !assertedPQ;
+    // Ambiguity: a hedge fires only while it still precedes the second event
+    // mention (windowHi) — a hedge trailing both mentions describes something
+    // else — and no comparative cue sits between the two mentions.
+    if (!comparative && windowHi !== -1) {
+      const hedgeAt = ambiguityCuePosition(sentence.text, AMBIGUITY_CUES);
+      if (hedgeAt !== -1 && hedgeAt < windowHi) {
+        const key = `amb:${a.event.id}|${b.event.id}`;
+        if (!seenPairs.has(key)) {
+          seenPairs.add(key);
+          ambiguities.push({ first: a, second: b, sentence });
+        }
+      }
     }
-
-    const key = `seq:${first.event.id}|${second.event.id}`;
-    if (seenPairs.has(key)) continue;
-    seenPairs.add(key);
-    contradictions.push({ first, second, assertedFirstPrecedes, sentence });
   }
 
   return { contradictions, ambiguities };

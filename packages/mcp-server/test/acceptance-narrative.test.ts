@@ -721,7 +721,9 @@ test("acceptance: narrative findings validate against the finding schema (ac-5)"
 test("acceptance: modular enablement — proof-narrative runs the narrative roster; the three existing proof projects keep it disabled (ac-6)", async () => {
   const proofFixturesDir = fileURLToPath(new URL("../../../proof/fixtures", import.meta.url));
   const { store: shipped, projectIds: shippedIds, skipped: shippedSkipped } = loadFixtures(proofFixturesDir);
-  assert.deepEqual(shippedIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
+  // Standing ruling v2 (additive): proof-implicit joins in the loader's
+  // emission order (see packages/proof/test/proof.test.ts).
+  assert.deepEqual(shippedIds, ["proof", "proof-implicit", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
   assert.deepEqual(shippedSkipped, [], "no shipped fixture is skipped");
 
   for (const projectId of ["proof", "proof-language", "proof-strict"]) {
