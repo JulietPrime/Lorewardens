@@ -1,4 +1,5 @@
 export * from "./types.js";
+export * from "./dates.js";
 export * from "./strictness.js";
 export * from "./canon.js";
 export * from "./context.js";

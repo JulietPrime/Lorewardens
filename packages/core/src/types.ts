@@ -67,6 +67,10 @@ export interface Character {
   injuries: string[];
   goals: string[];
   voice?: string;
+  // Writer-confirmed birth date, strict `YYYY | YYYY-MM | YYYY-MM-DD`
+  // (validated by parseCanonDate in dates.ts; anything else is treated as
+  // absent). Consumed by the Timeline agent's age checks.
+  birthDate?: string;
   relationships: CharacterRelationship[];
   status: CanonStatus;
   locked: boolean;
@@ -84,6 +88,11 @@ export interface TimelineEvent {
   description: string;
   order: number;
   precision: TimePrecision;
+  // Writer-confirmed date, strict `YYYY | YYYY-MM | YYYY-MM-DD` (validated
+  // by parseCanonDate in dates.ts; anything else is treated as absent). A
+  // fuzzy-precision event never carries a date: fuzzy + date is read as
+  // undated, keeping the event silent in date checks.
+  date?: string;
   participants: string[];
   location?: string;
   status: CanonStatus;
