@@ -79,13 +79,33 @@ comments, human and foreign comments survive → doc JSON byte-identical through
       startup, options configuration, the owner's Google Cloud/consent/client setup
       (referencing `google-oauth-credentials-v1`), the ≤100 test users flow, and the live E2E
       steps; `packages/bridge/README.md` covers the server.
-- [x] ac-9 — **qualified**: `npm run build` green at root; per-workspace suites green and
-      deterministic across two runs (core 25/26, agents 92/92, mcp-server 68 pass + 2
-      pre-existing skips, bridge 14/14, proof 32/32, docs-extension 32/32). The root `npm
-      test` chain currently fails in `packages/core` on a **pre-existing pin broken by this
-      task's mandated new packages — disclosed below, NOT touched, awaiting your ruling.**
+- [x] ac-9 — `npm run build && npm test` green at repo root, run twice with identical results;
+      per-workspace counts in this report; the two new packages wired into the root scripts.
 
-## BROKEN PIN — STOP and report (no edit applied)
+## PIN EDIT — authorized by architect ruling (docs-pin-ruling-v1), disclosed verbatim
+
+The pre-existing pin `ac-1: repo scaffold wires the four workspace packages in dependency
+order` (`packages/core/test/acceptance-foundations.test.ts`) broke when this task's mandated
+new workspace packages appeared (`readdirSync(packages)` deep-equal expected exactly
+`["agents", "core", "mcp-server", "proof"]`, actual six dirs). I STOPPED and reported
+untouched; the architect issued a binding ruling authorizing an additive, ruling-v2-style
+fix. Applied exactly as ruled:
+
+1. The exact `deepEqual` on the `readdirSync(packages)` listing is kept — no
+   superset/contains loosening.
+2. The expected array is extended to all six package dirs as literals, in the verified
+   runtime emission order (checked once: `["agents","bridge","core","docs-extension",
+   "mcp-server","proof"]`); values are never derived from the runtime listing.
+3. The four existing entries are byte-identical.
+4. Dependency assertions for the two new packages mirror the existing assertion style:
+   `deps("bridge") → ["@lorewardens/agents", "@lorewardens/core", "@lorewardens/mcp-server"]`,
+   `deps("docs-extension") → ["@lorewardens/bridge", "@lorewardens/core"]`.
+5. One-line comment on the edit: `// Increment-2 (Docs task) added the bridge and
+   docs-extension packages.`
+6. This section is the verbatim disclosure of that pin edit; nothing else in any existing
+   test was touched, and no pin was loosened.
+
+## Broken pin originally reported (resolved by the ruling above)
 
 `packages/core/test/acceptance-foundations.test.ts`, test *"ac-1: repo scaffold wires the
 four workspace packages in dependency order"*, asserts:
@@ -96,17 +116,13 @@ assert.deepEqual(dirs, ["agents", "core", "mcp-server", "proof"]);
 ```
 
 This task's spec mandates two NEW workspace packages, so `packages/` now contains
-`bridge` and `docs-extension` and this pin fails (`actual: ['agents','bridge','core',
-'docs-extension','mcp-server','proof']`). It is not the pre-authorized offline-scan label
-edit, so per the standing rule ("any other broken pin: STOP and report, never loosen") the
-pin is untouched and reported. The same test's per-package loop (scoped name, ESM, build
-script) passes for both new packages, and the per-package dep assertions for the original
-four packages are unaffected.
-
-Proposed additive resolution (requires your authorization; NOT applied): extend the expected
-dir list to the six packages and add dep assertions for the two new ones
-(`bridge → agents/core/mcp-server`, `docs-extension → bridge/core`) in the same additive
-spirit as ruling v2.
+`bridge` and `docs-extension` and this pin initially failed (`actual: ['agents','bridge',
+'core','docs-extension','mcp-server','proof']`). It is not the pre-authorized offline-scan
+label edit, so per the standing rule ("any other broken pin: STOP and report, never
+loosen") the pin was left untouched and reported; the architect's authorized resolution is
+the preceding section. The same test's per-package loop (scoped name, ESM, build script)
+passes for both new packages, and the per-package dep assertions for the original four
+packages are unaffected.
 
 ## Disclosures (complete list)
 
@@ -122,7 +138,8 @@ spirit as ruling v2.
    imports, network/nondeterminism pattern bans, loopback-bind pin, exact dependency
    assertions). Test files are excluded from the scan because they quote the patterns as
    data, mirroring the existing `packages/mcp-server/test/nonetwork.test.ts` precedent. The
-   proof test file is UNTOUCHED (zero pin edits in this task).
+   proof test file is UNTOUCHED (the only pin edit in this task is the architect-authorized
+   ac-1 scaffold fix disclosed above).
 2. **mcp-server re-exports** (`packages/mcp-server/src/index.ts`, additive only):
    `runAnalyzeTool`, input type `AnalyzeToolArgs`, `loadFixtures`, `defaultFixturesDir`
    (needed to load "the same fixtures directory the MCP server uses"), and `FixtureBundle`.
