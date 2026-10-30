@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Lorewardens — Options</title>
+    <style>
+      body { font: 14px/1.5 system-ui, sans-serif; margin: 24px auto; max-width: 640px; }
+      h1 { font-size: 18px; }
+      label { display: block; font-weight: 600; margin-top: 14px; }
+      input { width: 100%; box-sizing: border-box; padding: 6px; margin-top: 4px; }
+      button { margin-top: 16px; padding: 6px 14px; }
+      #status { margin-top: 12px; min-height: 1.2em; white-space: pre-wrap; }
+      code { background: rgba(127, 127, 127, 0.15); padding: 1px 5px; border-radius: 4px; }
+      .hint { opacity: 0.75; font-size: 12.5px; margin-top: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Lorewardens — Options</h1>
+    <p>All values stay in this browser profile's local storage. Nothing is committed or synced.</p>
+    <label for="bridgeUrl">Bridge URL</label>
+    <input id="bridgeUrl" placeholder="http://127.0.0.1:8765" />
+    <label for="bridgeToken">Bridge token</label>
+    <input id="bridgeToken" type="password" placeholder="paste the contents of .lorewardens-bridge.token" />
+    <p class="hint">The bridge writes this token to <code>.lorewardens-bridge.token</code> next to where it runs. Never commit it.</p>
+    <label for="oauthClientId">Google OAuth client id (web application)</label>
+    <input id="oauthClientId" placeholder="1234567890-abc.apps.googleusercontent.com" />
+    <p class="hint">
+      Testing mode only: create the client in the owner's Google Cloud project (see
+      <code>google-oauth-credentials-v1</code>), add the accounts that should have access as test users on the
+      consent screen, and use this redirect URI:
+      <code id="redirectUri"></code>
+    </p>
+    <h2>Extension ID</h2>
+    <p>
+      <code id="extensionId">loading…</code>
+    </p>
+    <p class="hint">
+      Start the bridge with <code>LOREWARDENS_EXTENSION_ID=&lt;this id&gt;</code> to pin the Origin allowlist to
+      this extension. The unpacked extension keeps this ID because the manifest carries a pinned key.
+    </p>
+    <button id="save">Save</button>
+    <button id="test">Test bridge connection</button>
+    <div id="status"></div>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

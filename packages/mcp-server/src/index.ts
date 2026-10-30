@@ -56,3 +56,10 @@ if (invokedDirectly) {
     process.exitCode = 1;
   });
 }
+
+// Additive re-exports for local clients of the same engine path (the loopback
+// bridge): the analyze tool and fixture loading, plus their input types.
+export { runAnalyzeTool } from "./tools.js";
+export type { AnalyzeToolArgs } from "./tools.js";
+export { defaultFixturesDir, loadFixtures } from "./store.js";
+export type { FixtureBundle } from "./store.js";

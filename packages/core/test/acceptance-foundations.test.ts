@@ -278,7 +278,8 @@ test("ac-1: repo scaffold wires the four workspace packages in dependency order"
   assert.ok(rootPkg.scripts.test.includes("@lorewardens/agents"), "root test must run agents tests");
 
   const dirs = fs.readdirSync(path.join(root, "packages")).sort();
-  assert.deepEqual(dirs, ["agents", "core", "mcp-server", "proof"]);
+  // Increment-2 (Docs task) added the bridge and docs-extension packages.
+  assert.deepEqual(dirs, ["agents", "bridge", "core", "docs-extension", "mcp-server", "proof"]);
 
   const deps = (dir: string): string[] =>
     Object.keys(JSON.parse(fs.readFileSync(path.join(root, "packages", dir, "package.json"), "utf8")).dependencies ?? {})
@@ -293,6 +294,12 @@ test("ac-1: repo scaffold wires the four workspace packages in dependency order"
     "@lorewardens/core",
     "@lorewardens/mcp-server",
   ]);
+  assert.deepEqual(deps("bridge"), [
+    "@lorewardens/agents",
+    "@lorewardens/core",
+    "@lorewardens/mcp-server",
+  ]);
+  assert.deepEqual(deps("docs-extension"), ["@lorewardens/bridge", "@lorewardens/core"]);
 
   for (const dir of dirs) {
     const pkg = JSON.parse(fs.readFileSync(path.join(root, "packages", dir, "package.json"), "utf8"));
