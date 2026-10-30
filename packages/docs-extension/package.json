@@ -5,7 +5,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp manifest.json dist/manifest.json && cp src/sidepanel/sidepanel.html dist/sidepanel/sidepanel.html && cp src/options/options.html dist/options/options.html && cp -r dist/src/. dist/",
+    "build": "tsc -p tsconfig.json && mkdir -p dist/background dist/sidepanel dist/options && cp manifest.json dist/manifest.json && cp src/sidepanel/sidepanel.html dist/sidepanel/sidepanel.html && cp src/options/options.html dist/options/options.html && cp -r dist/src/. dist/",
     "test": "node --test dist/test/*.test.js"
   },
   "dependencies": {
