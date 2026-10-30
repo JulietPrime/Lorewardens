@@ -376,6 +376,7 @@ test("acceptance: the MCP server exposes one analyze tool per narrative agent pl
       "analyze_sensitivity_representation",
       "analyze_theme_motif",
       "canon_list",
+      "canon_bootstrap",
     ],
   );
 });

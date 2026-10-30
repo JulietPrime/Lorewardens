@@ -5,6 +5,7 @@ import { createRegistry, type CanonStore } from "@lorewardens/core";
 import { ALL_AGENTS } from "@lorewardens/agents";
 import { defaultFixturesDir, loadFixtures } from "./store.js";
 import { buildTools, type ToolDef } from "./tools.js";
+import { buildCanonBootstrapTool } from "./bootstrap.js";
 
 export const SERVER_NAME = "lorewardens";
 export const SERVER_VERSION = "0.1.0";
@@ -20,7 +21,7 @@ export interface LorewardensServerBundle {
 export function createLorewardensServer(fixturesDir?: string): LorewardensServerBundle {
   const { store, projectIds, skipped } = loadFixtures(fixturesDir ?? defaultFixturesDir());
   const registry = createRegistry(ALL_AGENTS);
-  const tools = buildTools(registry, store);
+  const tools: ToolDef[] = [...buildTools(registry, store), buildCanonBootstrapTool()];
 
   const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
   for (const tool of tools) {
@@ -61,5 +62,7 @@ if (invokedDirectly) {
 // bridge): the analyze tool and fixture loading, plus their input types.
 export { runAnalyzeTool } from "./tools.js";
 export type { AnalyzeToolArgs } from "./tools.js";
+export { runCanonBootstrapTool, CanonBootstrapInput, CANON_BOOTSTRAP_TOOL_NAME } from "./bootstrap.js";
+export type { CanonBootstrapToolArgs, CanonBootstrapToolResult } from "./bootstrap.js";
 export { defaultFixturesDir, loadFixtures } from "./store.js";
 export type { FixtureBundle } from "./store.js";

@@ -6,3 +6,4 @@ export * from "./context.js";
 export * from "./agent.js";
 export * from "./findings.js";
 export * from "./registry.js";
+export * from "./bootstrap.js";

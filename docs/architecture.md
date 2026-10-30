@@ -12,6 +12,7 @@ Agents never auto-rewrite or take creative control.
 | Continuity agents (Canon/Lore, Character Consistency, Timeline) | `packages/agents` | current (increment 1: deterministic lexical matchers) | core |
 | Local MCP server (stdio, no external permissions) | `packages/mcp-server` | current (increment 1: analyze tools + read-only `canon_list`, fixture-seeded canon store, smoke script) | core, agents |
 | Seeded-error proof suite | `packages/proof` | current (increment 1: seeded manuscript + automated suite driving `runAnalyzeTool`; catch table, strictness matrix, clean silence, schema/offsets, determinism) | core, agents, mcp-server |
+| Canon bootstrap (pasted story -> draft canon proposal) | `packages/core` + `packages/mcp-server` | current (increment 3: `canon_bootstrap` MCP tool; deterministic offline extractor, every item `proposed`, store untouched — see `docs/canon-bootstrap.md`) | core, mcp-server |
 | Living Canon store persistence | `packages/core` (v0 in-memory; file-backed next) | current | core types |
 | Google Docs integration (extension + sidebar/comments, OAuth Testing mode) | future package | potential | mcp-server |
 | Broader agent roster (Domain, Language & Prose, Narrative, Optional — 14 more) | `packages/agents` | potential | core, agents |

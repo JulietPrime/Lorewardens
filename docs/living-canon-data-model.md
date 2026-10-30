@@ -56,6 +56,12 @@ leap-aware); anything that does not parse is treated as absent, so a typo
 degrades to silence rather than a wrong finding. A `fuzzy`-precision event
 never carries a date: fuzzy + date is read as undated.
 
+> **Bootstrap drafts never fabricate these fields.** The `canon_bootstrap`
+> extractor (`docs/canon-bootstrap.md`) produces draft proposals where every
+> event is `precision: "fuzzy"` with no `date`, and no character carries a
+> `birthDate`. Filling them in is exactly the kind of writer-confirmed fact
+> the confirmation flow exists for.
+
 The Timeline agent uses these fields for three checks — `date-contradiction`
 (a conflicting year/month/season asserted for a dated event),
 `duration-contradiction` (elapsed time or order between two dated events that

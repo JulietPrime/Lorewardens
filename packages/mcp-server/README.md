@@ -102,6 +102,7 @@ vars, no network, no external permissions.
 | `analyze_character_consistency` | same input | same output |
 | `analyze_timeline` | same input | same output |
 | `canon_list` | `{ projectId }` | `{ projectId, snapshot: { entries, characters, events }, counts, note }` |
+| `canon_bootstrap` | `{ projectId, source: { kind: "text", text, label? } \| { kind: "file", path }, generatedAt?, outputPath? }` | `{ projectId, source: {kind, label, length}, generatedAt, snapshot, counts, notes, writtenTo? }` |
 
 - `strictness` is optional: `off \| gentle \| standard \| strict`. It defaults
   to the project's agent setting, then the agent's `defaultStrictness`
@@ -116,6 +117,39 @@ vars, no network, no external permissions.
   whole manuscript.
 - Unknown `projectId`, malformed input, or a disabled agent produce clear
   error/reason text. Nothing mutates.
+
+## Canon bootstrap: paste a story, get a draft canon
+
+`canon_bootstrap` is the entry point for "I have a story, give me a starting
+canon". It runs a deterministic, offline extractor over a pasted chunk (or a
+local UTF-8 file) and returns a DRAFT snapshot in the exact canon fixture
+shape, ready for the existing proposal -> writer-confirmation flow.
+
+- Every item is `status: "proposed"` — nothing auto-confirms, and the
+  fixture store is never touched (asserted by tests: `canon_list` output is
+  byte-identical before/after any bootstrap call).
+- Zero network anywhere in the path (grep-guarded in tests).
+- The draft is written to disk only when the writer passes `outputPath`;
+  existing files are never overwritten and no directory is ever created.
+- Byte-deterministic: the same input (and `generatedAt`) yields
+  byte-identical output; `generatedAt` defaults to a fixed constant and the
+  confirmation flow re-stamps timestamps on apply.
+- Events come out `precision: "fuzzy"` with no `date`, characters with no
+  `birthDate` — writer-confirmed fields are never fabricated.
+- Extraction is precision-first with modest recall by design; the curated
+  cue tables, pinned behaviors and known limits live in
+  `docs/canon-bootstrap.md`.
+
+Example call:
+
+```json
+{
+  "projectId": "my-novel",
+  "source": { "kind": "text", "text": "Every gate closes at dusk. Mira said the road was closed." },
+  "outputPath": "/home/writer/my-novel.canon.json"
+}
+```
+
 
 ## Canon fixtures
 

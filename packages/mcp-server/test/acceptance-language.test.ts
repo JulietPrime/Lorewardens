@@ -254,6 +254,7 @@ test("acceptance: the MCP server exposes one analyze tool per language agent plu
       "analyze_sensitivity_representation",
       "analyze_theme_motif",
       "canon_list",
+      "canon_bootstrap",
     ],
   );
 });

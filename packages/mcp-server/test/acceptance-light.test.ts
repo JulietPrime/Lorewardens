@@ -427,8 +427,9 @@ test("acceptance: the MCP server exposes one analyze tool per optional agent (ac
       "analyze_sensitivity_representation",
       "analyze_theme_motif",
       "canon_list",
+      "canon_bootstrap",
     ],
-    "the fifteen tools include the three optional analyze tools before canon_list",
+    "the sixteen tools include the three optional analyze tools before canon_list, then canon_bootstrap",
   );
 });
 

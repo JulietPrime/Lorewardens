@@ -56,6 +56,7 @@ test("the server bundle registers the full roster: continuity plus language plus
       "analyze_sensitivity_representation",
       "analyze_theme_motif",
       "canon_list",
+      "canon_bootstrap",
     ],
   );
 });
