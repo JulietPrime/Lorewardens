@@ -11,8 +11,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build -w @lorewardens/core && npm run build -w @lorewardens/agents && npm run build -w @lorewardens/mcp-server && npm run build -w @lorewardens/proof",
-    "test": "npm run build && npm run test -w @lorewardens/core && npm run test -w @lorewardens/agents && npm run test -w @lorewardens/mcp-server && npm run test -w @lorewardens/proof",
+    "build": "npm run build -w @lorewardens/core && npm run build -w @lorewardens/agents && npm run build -w @lorewardens/mcp-server && npm run build -w @lorewardens/bridge && npm run build -w @lorewardens/proof && npm run build -w @lorewardens/docs-extension",
+    "test": "npm run build && npm run test -w @lorewardens/core && npm run test -w @lorewardens/agents && npm run test -w @lorewardens/mcp-server && npm run test -w @lorewardens/bridge && npm run test -w @lorewardens/proof && npm run test -w @lorewardens/docs-extension",
     "clean": "rm -rf packages/*/dist"
   },
   "devDependencies": {

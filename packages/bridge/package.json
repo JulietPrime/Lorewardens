@@ -1,0 +1,25 @@
+{
+  "name": "@lorewardens/bridge",
+  "version": "0.1.0",
+  "description": "Loopback HTTP bridge serving the Lorewardens engine to local clients (Google Docs extension); listens on 127.0.0.1 only, zero runtime dependencies beyond workspace packages",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "bin": {
+    "lorewardens-bridge": "dist/src/start.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/src/start.js",
+    "test": "node --test dist/test/*.test.js"
+  },
+  "dependencies": {
+    "@lorewardens/core": "0.1.0",
+    "@lorewardens/agents": "0.1.0",
+    "@lorewardens/mcp-server": "0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/node": "^20.14.10"
+  }
+}

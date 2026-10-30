@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Lorewardens</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body { font: 13px/1.45 system-ui, sans-serif; margin: 10px; max-width: 420px; }
+      h1 { font-size: 15px; margin: 0 0 8px; }
+      h2 { font-size: 13px; margin: 14px 0 6px; }
+      button { margin: 2px 4px 2px 0; padding: 4px 10px; }
+      input { width: 100%; box-sizing: border-box; padding: 4px; margin: 2px 0 8px; }
+      #status { margin: 8px 0; padding: 6px 8px; border-radius: 6px; background: color-mix(in srgb, currentColor 8%, transparent); min-height: 1.2em; white-space: pre-wrap; }
+      .finding { border: 1px solid color-mix(in srgb, currentColor 25%, transparent); border-radius: 6px; padding: 6px 8px; margin: 6px 0; }
+      .finding .meta { font-weight: 600; }
+      .finding .quote { font-style: italic; opacity: 0.85; margin-top: 2px; }
+      .severity-major, .severity-critical { color: #b3261e; }
+      .severity-minor { color: #9a6b00; }
+      .severity-info { opacity: 0.75; }
+      .agent { display: flex; justify-content: space-between; gap: 8px; padding: 1px 0; }
+      .muted { opacity: 0.65; }
+      .notice { color: #9a6b00; margin: 6px 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Lorewardens</h1>
+    <div id="status">Loading…</div>
+    <div class="notice" id="multitab" hidden>Multi-tab document: analyzing the first tab only (v1 limit).</div>
+    <label for="projectId">Canon project</label>
+    <input id="projectId" placeholder="demo" />
+    <div>
+      <button id="grab">Use active Docs tab</button>
+      <button id="runFull">Run full check</button>
+      <button id="clear">Clear Lorewardens comments</button>
+      <a href="../options/options.html" target="_blank">Options</a>
+    </div>
+    <h2>Findings</h2>
+    <div id="findings"></div>
+    <h2>Project settings (read-only)</h2>
+    <div id="settings" class="muted">Open a document and a project to see enabled agents.</div>
+    <script type="module" src="sidepanel.js"></script>
+  </body>
+</html>

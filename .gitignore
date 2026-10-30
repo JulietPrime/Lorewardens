@@ -3,3 +3,5 @@ dist/
 *.tsbuildinfo
 .mcp.json
 .orq-mcp-config.json
+
+.lorewardens-bridge.token

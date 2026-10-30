@@ -48,12 +48,30 @@
       "owner": "builder"
     },
     {
+      "id": "bridge",
+      "name": "@lorewardens/bridge",
+      "type": "service",
+      "status": "planned",
+      "depends_on": ["core", "agents", "mcp-server"],
+      "description": "Loopback HTTP bridge (127.0.0.1 only) serving the same engine path as the MCP server: token + Origin + Host guards, /analyze, /settings/:projectId, /health; no egress, read-only fixtures",
+      "owner": "builder"
+    },
+    {
+      "id": "docs-extension",
+      "name": "@lorewardens/docs-extension",
+      "type": "client",
+      "status": "planned",
+      "depends_on": ["bridge", "core"],
+      "description": "MV3 Google Docs extension (load unpacked, stable id via pinned manifest key): incremental analysis, findings as native Docs comments plus side panel, OAuth Testing mode via chrome.identity.launchWebAuthFlow",
+      "owner": "builder"
+    },
+    {
       "id": "google-docs-integration",
       "name": "Google Docs integration",
       "type": "client",
       "status": "potential",
       "depends_on": ["mcp-server"],
-      "description": "Browser extension and/or Docs API + sidebar/comments, OAuth Testing mode, unpacked extension for local testing",
+      "description": "Browser extension and/or Docs API + sidebar/comments, OAuth Testing mode, unpacked extension for local testing (superseded in build by the bridge + docs-extension components)",
       "owner": "architect"
     },
     {

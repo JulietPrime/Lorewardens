@@ -1,0 +1,19 @@
+{
+  "name": "@lorewardens/docs-extension",
+  "version": "0.1.0",
+  "description": "Lorewardens Google Docs extension (MV3, loadable unpacked): findings as native Docs comments plus a sidebar, via the loopback bridge",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.json && mkdir -p dist/background dist/sidepanel dist/options && cp manifest.json dist/manifest.json && cp src/sidepanel/sidepanel.html dist/sidepanel/sidepanel.html && cp src/options/options.html dist/options/options.html",
+    "test": "node --test dist/test/*.test.js"
+  },
+  "dependencies": {
+    "@lorewardens/bridge": "0.1.0",
+    "@lorewardens/core": "0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/node": "^20.14.10"
+  }
+}

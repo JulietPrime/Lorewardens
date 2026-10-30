@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Lorewardens",
+  "version": "0.1.0",
+  "description": "Fiction continuity checks inside Google Docs: non-destructive findings as comments plus a sidebar, powered by the local Lorewardens engine.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAviixbva8DS4dl4E96vSYruGxKW+HATn2paNGUIqYmAH+Mxa5XM5u2ST3uxpsQvK7MOG+7kcu2fbGx7uIYWEJj0zT7i0vh5Cw1et8xj8FJc9OdXy3cDu5CJoTHS4Cc4F4l9F+Kq1koavaFN5nZlKahhC1qqEwbkj0BLxauo8g5CNdN+/6PwHljrkqdI0o+l7KfqHK0g5u8HLbbJkXy7F6b7tgBlDRR4MM+8hsf96wotmr+zEL31RUEzvpL1x2EnexeAI1819PCnW+Tfjpyv1LDMsVbSHDM1g3+m4d7hVQSNTVfe8w8e2V9LV9tAFvG6euGvA5If/VoPtH/JEOkkR0yQIDAQAB",
+  "permissions": ["sidePanel", "storage", "identity", "activeTab", "alarms"],
+  "host_permissions": [
+    "https://docs.googleapis.com/",
+    "https://www.googleapis.com/",
+    "http://127.0.0.1:8765/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_title": "Lorewardens"
+  }
+}
