@@ -117,6 +117,8 @@ export interface CanonContext {
   entries: CanonEntry[];
   characters: Character[];
   events: TimelineEvent[];
+  /** Capitalized proper-noun tokens evidenced in confirmed setting entries (place-name guard source). */
+  placeNames?: string[];
 }
 
 export type CanonSubjectKind = "canon-entry" | "character" | "timeline-event";

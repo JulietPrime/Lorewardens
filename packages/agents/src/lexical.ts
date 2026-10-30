@@ -1,6 +1,19 @@
 import type { Character, Strictness } from "@lorewardens/core";
 import { STRICTNESS_CONFIDENCE_FLOOR, STRICTNESS_ORDER } from "@lorewardens/core";
 
+// Name-variant rule table (closed, documented): re-exported from core for
+// call-site convenience. Thin re-export only — no logic duplication.
+export {
+  canonNamesOf,
+  capitalizedTokens,
+  isStoplistedName,
+  nameVariantOf,
+  stripPossessive,
+  textHasNameVariant,
+  wholeWordTokens,
+} from "@lorewardens/core";
+export type { NameVariantMatch } from "@lorewardens/core";
+
 // ---------------------------------------------------------------------------
 // Deterministic lexical helpers for the continuity matchers.
 //

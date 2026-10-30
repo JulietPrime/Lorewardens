@@ -119,6 +119,69 @@ share a participant their first-mention indices collapse onto the shared
 name; the ambiguity gate then falls back to each event's first
 distinguishing keyword to build the window.
 
+## Name-variant drift (character-consistency)
+
+The character-consistency agent flags spelling drift between a passage and
+the writer-confirmed character canon (`name-variant-drift`; minor / 0.72 /
+standard — silent at gentle, surfaces at standard and strict). The rule
+table lives in `packages/core/src/name-variants.ts` and is the ONLY spelling
+tolerance that exists in the engine: closed, enumerated, offline, no fuzzy
+thresholds beyond the listed edit operations.
+
+**Closed variant rule table.** A candidate text token T is a spelling
+variant of a canon name N iff ALL hold:
+
+1. T and N are case-insensitively unequal — exact matches (canon name or
+   alias) are never variants;
+2. restricted Damerau-Levenshtein distance between `lower(T)` and `lower(N)`
+   is exactly 1: ONE of — single substitution, single insertion, single
+   deletion, adjacent transposition. No other operation, no distance 2, no
+   phonetic rules;
+3. `min(len(T), len(N)) >= 4` — short names never variant-match (avoids
+   'Ed'/'Edw' noise);
+4. T appears as a CAPITALIZED whole word token in the sentence text
+   (proper-noun surfaces only; tokenization: `[A-Za-z0-9'’]+` runs,
+   possessive `'s`/`'s` stripped before comparing, the stripped token is
+   what is compared);
+5. T is not stoplisted (the same name stoplist the place-name evidence
+   below uses).
+
+Canon name sources per character: `[character.name, ...character.aliases]`,
+each length > 1. **Aliases are honored by construction:** an exact
+case-insensitive alias match is never a variant, so a writer who locks a
+deliberate variant as an alias silences it permanently. The writer dismissal
+path is to add the variant as an alias of the character (or correct the
+canon spelling) — no new store plumbing, no exception plumbing.
+
+**Variant-tolerant context selection.** A confirmed character enters the
+agent's context when any capitalized whole token of the chunk is a
+rule-table variant of the character's name or one of its aliases — so a
+paragraph that contains ONLY the drifted spelling still reaches the agent
+and still flags. Without this, the feature would fail its own acceptance
+case: the drifted paragraphs never pull the character into context.
+
+**Stateless semantics (pinned judgment call).** The canon spelling is the
+reference, so EVERY variant occurrence flags — there is no document-order
+"first mention" tracking. The owner's scenario (canon spelling first, drift
+later) is fully covered; a variant-first occurrence also flags, which is
+minor, advisory, and dismissible by locking the variant as an alias.
+Determinism and the chunk-wise contract outrank the literal "after first
+mention" wording.
+
+**Place-name guard.** An issue is suppressed when EITHER the character's
+canon name (name or alias) OR the variant token T is a member of
+`CanonContext.placeNames` (case-insensitive). `placeNames` is populated by
+the context selector from the snapshot: for every confirmed `setting`
+entry, its capitalized whole-word tokens (length >= 4, not stoplisted,
+first-occurrence order, first capitalized casing kept) are place-name
+evidence — a sentence became a setting entry because a place cue noun was
+present, so its capitalized tokens are place evidence. A proper noun
+evidenced as a place in confirmed setting canon must not be treated as a
+character name; this prevents the canon extractor's documented v1 gap
+(recurring proper-noun places proposed as characters) from compounding
+into drift findings. The writer-side cleanup of a mis-proposal stays
+manual, exactly as `docs/canon-bootstrap.md` documents.
+
 ## Modular enable/disable
 
 `ProjectSettings.agents[]` holds an `AgentSettings` per agent:

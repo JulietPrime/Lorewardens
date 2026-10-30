@@ -3,12 +3,14 @@ import { makeFinding } from "@lorewardens/core";
 import {
   aboutStatement,
   antonymConflict,
+  capitalizedTokens,
   contentWords,
   gateForAgent,
   hasNegation,
   KNOWLEDGE_CUES,
   mentionsSubject,
   namesOf,
+  nameVariantOf,
   RECOVERY_CUES,
   sentences,
 } from "./lexical.js";
@@ -29,6 +31,7 @@ interface Issue {
   quote: string;
   start: number;
   end: number;
+  suggestion?: string;
 }
 
 function suggestionFor(character: Character): string {
@@ -190,6 +193,58 @@ export function detectRelationshipDrift(chunkText: string, context: CanonContext
   return issues;
 }
 
+/**
+ * Name-variant drift (stateless): the canon spelling is the reference, so
+ * EVERY variant occurrence flags — there is no document-order "first
+ * mention" tracking. The owner's scenario (canon spelling first, drift
+ * later) is fully covered; a variant-first occurrence also flags, which is
+ * minor, advisory, and dismissible by locking the variant as an alias.
+ * Determinism and the chunk-wise contract outrank the literal "after first
+ * mention" wording.
+ *
+ * Place-name guard: a proper noun evidenced as a place in confirmed setting
+ * canon must not be treated as a character name. The issue is suppressed
+ * when EITHER the character's canon name (name or alias) OR the variant
+ * token T is a member of context.placeNames — this prevents the canon
+ * extractor's documented v1 gap (recurring proper-noun places proposed as
+ * characters) from compounding into drift findings.
+ */
+export function detectNameVariantDrift(chunkText: string, context: CanonContext): Issue[] {
+  const issues: Issue[] = [];
+  const seen = new Set<string>();
+  const placeNames = new Set((context.placeNames ?? []).map((p) => p.toLowerCase()));
+  const characters = context.characters.filter((c) => c.status === "confirmed");
+  for (const character of characters) {
+    const names = namesOf(character);
+    const canonNameIsPlaceEvidenced = names.some((n) => placeNames.has(n.toLowerCase()));
+    for (const sentence of sentences(chunkText)) {
+      for (const token of capitalizedTokens(sentence.text)) {
+        // Exact case-insensitive members (canon name or alias) never flag.
+        if (names.some((n) => n.toLowerCase() === token.toLowerCase())) continue;
+        const match = nameVariantOf(token, names);
+        if (!match) continue;
+        if (canonNameIsPlaceEvidenced || placeNames.has(token.toLowerCase())) continue;
+        pushIssue(issues, seen, {
+          character,
+          type: "name-variant-drift",
+          severity: "minor",
+          confidence: 0.72,
+          minStrictness: "standard",
+          message: `Passage spells ${character.name} as '${token}' (canon: '${match.canonical}').`,
+          canonRefs: [character.id],
+          quote: sentence.text,
+          start: sentence.start,
+          end: sentence.end,
+          suggestion:
+            `Character proposal (advisory): align the passage with the canon spelling, ` +
+            `or lock the variant as an alias of ${character.name} if it is deliberate.`,
+        });
+      }
+    }
+  }
+  return issues;
+}
+
 export function characterConsistencyFindings(
   chunk: TextChunk,
   context: CanonContext,
@@ -198,6 +253,7 @@ export function characterConsistencyFindings(
 ): Finding[] {
   const issues = [
     ...detectCharacterIssues(chunk.text, context),
+    ...detectNameVariantDrift(chunk.text, context),
     ...(options.relationshipState && strictness === "strict" ? detectRelationshipDrift(chunk.text, context) : []),
   ];
   return issues.map((issue) =>
@@ -216,7 +272,7 @@ export function characterConsistencyFindings(
         endOffset: chunk.span.startOffset + issue.end,
       },
       canonRefs: issue.canonRefs,
-      suggestion: suggestionFor(issue.character),
+      suggestion: issue.suggestion ?? suggestionFor(issue.character),
     }),
   );
 }
