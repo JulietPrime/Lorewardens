@@ -35,7 +35,7 @@ test("one tool per registered agent plus read-only canon_list", () => {
   }
 });
 
-test("the server bundle registers the full roster: continuity plus language plus narrative tools", async () => {
+test("the server bundle registers the full roster: continuity plus language plus narrative plus optional tools", async () => {
   const { createLorewardensServer } = await import("../src/index.js");
   const bundle = createLorewardensServer();
   assert.deepEqual(
@@ -52,6 +52,9 @@ test("the server bundle registers the full roster: continuity plus language plus
       "analyze_plot_thread",
       "analyze_pacing_tension",
       "analyze_pov_consistency",
+      "analyze_show_vs_tell",
+      "analyze_sensitivity_representation",
+      "analyze_theme_motif",
       "canon_list",
     ],
   );

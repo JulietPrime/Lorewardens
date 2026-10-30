@@ -157,8 +157,11 @@ test("all three continuity agents are exported and implement the contract", () =
       ["plot-thread", "narrative", "Plot Thread / Promise", "standard"],
       ["pacing-tension", "narrative", "Pacing / Tension", "standard"],
       ["pov-consistency", "narrative", "POV Consistency", "standard"],
+      ["show-vs-tell", "optional", "Show vs Tell / Craft", "standard"],
+      ["sensitivity-representation", "optional", "Sensitivity / Representation", "standard"],
+      ["theme-motif", "optional", "Theme / Motif", "standard"],
     ],
-    "AGENT_DESCRIPTORS pin the full registered roster (continuity + language + narrative)",
+    "AGENT_DESCRIPTORS pin the full registered roster (continuity + language + narrative + optional)",
   );
   assert.deepEqual(CONTINUITY_AGENTS.map((a) => a.id), ["canon-lore", "character-consistency", "timeline"]);
   for (const agent of CONTINUITY_AGENTS) {

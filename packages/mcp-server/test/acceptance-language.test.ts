@@ -204,7 +204,7 @@ function directInput(text: string, context: CanonContext, strictness: Level): An
 
 test("acceptance: the five language agents are registered behind the unchanged contract (ac-1)", () => {
   const registry = createRegistry(ALL_AGENTS);
-  assert.equal(registry.list().length, 11, "eleven agents registered in total");
+  assert.equal(registry.list().length, 14, "fourteen agents registered in total");
   assert.deepEqual(
     ALL_AGENTS.map((a) => a.id),
     [
@@ -215,8 +215,11 @@ test("acceptance: the five language agents are registered behind the unchanged c
       "plot-thread",
       "pacing-tension",
       "pov-consistency",
+      "show-vs-tell",
+      "sensitivity-representation",
+      "theme-motif",
     ],
-    "the continuity trio keeps its order and shape; the five language agents and three narrative agents join the roster",
+    "the continuity trio keeps its order and shape; the language, narrative and optional rosters join in turn",
   );
   for (const id of LANGUAGE_IDS) {
     const agent = registry.get(id);
@@ -247,6 +250,9 @@ test("acceptance: the MCP server exposes one analyze tool per language agent plu
       "analyze_plot_thread",
       "analyze_pacing_tension",
       "analyze_pov_consistency",
+      "analyze_show_vs_tell",
+      "analyze_sensitivity_representation",
+      "analyze_theme_motif",
       "canon_list",
     ],
   );
@@ -262,13 +268,23 @@ test("acceptance: the finding schema and MCP validation accept the new agent ids
   const agentEnum: string[] = schema.properties.agent.enum;
   assert.deepEqual(
     [...agentEnum].sort(),
-    [...LANGUAGE_IDS, ...CONTINUITY_IDS, "pacing-tension", "plot-thread", "pov-consistency"].sort(),
-    "the schema agent enum carries exactly the eleven registered ids",
+    [
+      ...LANGUAGE_IDS,
+      ...CONTINUITY_IDS,
+      "pacing-tension",
+      "plot-thread",
+      "pov-consistency",
+      "show-vs-tell",
+      "sensitivity-representation",
+      "theme-motif",
+    ].sort(),
+    "the schema agent enum carries exactly the fourteen registered ids",
   );
   const categoryEnum: string[] = schema.properties.category.enum;
-  assert.deepEqual([...categoryEnum].sort(), ["canon", "character", "language", "narrative", "prose", "timeline"]);
+  assert.deepEqual([...categoryEnum].sort(), ["canon", "character", "language", "narrative", "optional", "prose", "timeline"]);
   assert.ok(categoryEnum.includes("language"), "language category present");
   assert.ok(categoryEnum.includes("prose"), "prose category present");
+  assert.ok(categoryEnum.includes("optional"), "optional category present");
 });
 
 test("acceptance: MCP validation accepts language/prose findings and rejects unknown values (ac-5)", async () => {
@@ -642,7 +658,7 @@ test("acceptance: the fixture project runs only the language roster; the continu
 test("acceptance: the shipped increment-1 proof projects keep the language roster explicitly disabled (ac-6)", async () => {
   const proofFixturesDir = fileURLToPath(new URL("../../../proof/fixtures", import.meta.url));
   const { store: shipped, projectIds: shippedIds, skipped: shippedSkipped } = loadFixtures(proofFixturesDir);
-  assert.deepEqual(shippedIds, ["proof", "proof-language", "proof-narrative", "proof-strict"]);
+  assert.deepEqual(shippedIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
   assert.deepEqual(shippedSkipped, [], "no shipped fixture is skipped");
   for (const projectId of ["proof", "proof-strict"]) {
     const raw = JSON.parse(readFileSync(join(proofFixturesDir, `${projectId}.settings.json`), "utf8")) as {

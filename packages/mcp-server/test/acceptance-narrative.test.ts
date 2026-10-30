@@ -51,7 +51,8 @@ const LANGUAGE_IDS = [
   "period-dialect",
 ] as const;
 const NARRATIVE_IDS = ["plot-thread", "pacing-tension", "pov-consistency"] as const;
-const ALL_IDS = [...CONTINUITY_IDS, ...LANGUAGE_IDS, ...NARRATIVE_IDS];
+const OPTIONAL_IDS = ["show-vs-tell", "sensitivity-representation", "theme-motif"] as const;
+const ALL_IDS = [...CONTINUITY_IDS, ...LANGUAGE_IDS, ...NARRATIVE_IDS, ...OPTIONAL_IDS];
 
 // -- Purpose-built fixture store -------------------------------------------
 
@@ -293,11 +294,11 @@ const CLEAN_CHUNK =
 
 test("acceptance: the three narrative agents are registered behind the unchanged contract (ac-1)", () => {
   const registry = createRegistry(ALL_AGENTS);
-  assert.equal(registry.list().length, 11, "eleven agents registered in total");
+  assert.equal(registry.list().length, 14, "fourteen agents registered in total");
   assert.deepEqual(
     ALL_AGENTS.map((a) => a.id),
-    [...CONTINUITY_IDS, ...LANGUAGE_IDS, ...NARRATIVE_IDS],
-    "the prior rosters keep their order; the three narrative agents close the roster",
+    [...CONTINUITY_IDS, ...LANGUAGE_IDS, ...NARRATIVE_IDS, ...OPTIONAL_IDS],
+    "the prior rosters keep their order; the three optional agents close the roster",
   );
   for (const id of NARRATIVE_IDS) {
     const agent = registry.get(id);
@@ -312,15 +313,15 @@ test("acceptance: the three narrative agents are registered behind the unchanged
   }
 });
 
-test("acceptance: the disclosed narrative descriptor rows sit at the close of the roster (ac-1, ac-7)", () => {
-  assert.equal(AGENT_DESCRIPTORS.length, 11);
+test("acceptance: the disclosed narrative descriptor rows sit ahead of the optional rows (ac-1, ac-7)", () => {
+  assert.equal(AGENT_DESCRIPTORS.length, 14);
   assert.deepEqual(
     AGENT_DESCRIPTORS.slice(0, 8).map((d) => d.id),
     [...CONTINUITY_IDS, ...LANGUAGE_IDS],
     "the continuity and language rows are byte-identical in order ahead of the narrative rows",
   );
   assert.deepEqual(
-    AGENT_DESCRIPTORS.slice(8).map((d) => ({
+    AGENT_DESCRIPTORS.slice(8, 11).map((d) => ({
       id: d.id,
       family: d.family,
       title: d.title,
@@ -333,6 +334,22 @@ test("acceptance: the disclosed narrative descriptor rows sit at the close of th
       { id: "pov-consistency", family: "narrative", title: "POV Consistency", defaultStrictness: "standard", options: [] },
     ],
     "the three narrative descriptor rows match the disclosed pre-authorized shape exactly",
+  );
+  assert.deepEqual(
+    AGENT_DESCRIPTORS.slice(11).map((d) => ({
+      id: d.id,
+      family: d.family,
+      title: d.title,
+      defaultStrictness: d.defaultStrictness,
+      defaultEnabled: d.defaultEnabled,
+      options: d.options,
+    })),
+    [
+      { id: "show-vs-tell", family: "optional", title: "Show vs Tell / Craft", defaultStrictness: "standard", defaultEnabled: false, options: [] },
+      { id: "sensitivity-representation", family: "optional", title: "Sensitivity / Representation", defaultStrictness: "standard", defaultEnabled: false, options: [] },
+      { id: "theme-motif", family: "optional", title: "Theme / Motif", defaultStrictness: "standard", defaultEnabled: false, options: [] },
+    ],
+    "the three optional descriptor rows close the roster, off by default",
   );
   for (const d of AGENT_DESCRIPTORS.slice(8)) {
     assert.ok(d.description.length > 0, `${d.id} carries a description`);
@@ -355,6 +372,9 @@ test("acceptance: the MCP server exposes one analyze tool per narrative agent pl
       "analyze_plot_thread",
       "analyze_pacing_tension",
       "analyze_pov_consistency",
+      "analyze_show_vs_tell",
+      "analyze_sensitivity_representation",
+      "analyze_theme_motif",
       "canon_list",
     ],
   );
@@ -655,11 +675,11 @@ test("acceptance: narrative findings validate against the finding schema (ac-5)"
   const agentEnum: string[] = schema.properties.agent.enum;
   assert.deepEqual(
     [...agentEnum].sort(),
-    [...LANGUAGE_IDS, ...CONTINUITY_IDS, ...NARRATIVE_IDS].sort(),
-    "the schema agent enum carries exactly the eleven registered ids",
+    [...LANGUAGE_IDS, ...CONTINUITY_IDS, ...NARRATIVE_IDS, ...OPTIONAL_IDS].sort(),
+    "the schema agent enum carries exactly the fourteen registered ids",
   );
   const categoryEnum: string[] = schema.properties.category.enum;
-  assert.deepEqual([...categoryEnum].sort(), ["canon", "character", "language", "narrative", "prose", "timeline"]);
+  assert.deepEqual([...categoryEnum].sort(), ["canon", "character", "language", "narrative", "optional", "prose", "timeline"]);
 
   const representatives: Finding[] = [
     ...findingsOf(await analyzeTool("plot-thread", "qa-plot", ANTONYM_CHUNK, "standard")),
@@ -701,7 +721,7 @@ test("acceptance: narrative findings validate against the finding schema (ac-5)"
 test("acceptance: modular enablement — proof-narrative runs the narrative roster; the three existing proof projects keep it disabled (ac-6)", async () => {
   const proofFixturesDir = fileURLToPath(new URL("../../../proof/fixtures", import.meta.url));
   const { store: shipped, projectIds: shippedIds, skipped: shippedSkipped } = loadFixtures(proofFixturesDir);
-  assert.deepEqual(shippedIds, ["proof", "proof-language", "proof-narrative", "proof-strict"]);
+  assert.deepEqual(shippedIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
   assert.deepEqual(shippedSkipped, [], "no shipped fixture is skipped");
 
   for (const projectId of ["proof", "proof-language", "proof-strict"]) {

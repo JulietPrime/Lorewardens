@@ -15,9 +15,12 @@ export type ContinuityAgentId =
   | "period-dialect"
   | "plot-thread"
   | "pacing-tension"
-  | "pov-consistency";
+  | "pov-consistency"
+  | "show-vs-tell"
+  | "sensitivity-representation"
+  | "theme-motif";
 
-export type Category = "canon" | "character" | "timeline" | "language" | "prose" | "narrative";
+export type Category = "canon" | "character" | "timeline" | "language" | "prose" | "narrative" | "optional";
 
 export interface Span {
   file: string;
@@ -182,5 +185,6 @@ export interface AgentDescriptor {
   title: string;
   description: string;
   defaultStrictness: Strictness;
+  defaultEnabled?: boolean;
   options?: AgentDescriptorOption[];
 }

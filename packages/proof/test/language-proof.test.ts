@@ -96,8 +96,8 @@ async function analyze(agentId: string, paragraph: Paragraph, strictness?: Level
   })) as AnalyzeToolResult;
 }
 
-test("the proof fixture directory seeds all four projects without skips", () => {
-  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-narrative", "proof-strict"]);
+test("the proof fixture directory seeds all five projects without skips", () => {
+  assert.deepEqual(projectIds, ["proof", "proof-language", "proof-light", "proof-narrative", "proof-strict"]);
   assert.deepEqual(skipped, []);
 });
 

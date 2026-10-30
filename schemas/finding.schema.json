@@ -39,13 +39,16 @@
         "period-dialect",
         "plot-thread",
         "pacing-tension",
-        "pov-consistency"
+        "pov-consistency",
+        "show-vs-tell",
+        "sensitivity-representation",
+        "theme-motif"
       ],
       "description": "The agent that produced the finding."
     },
     "category": {
       "type": "string",
-      "enum": ["canon", "character", "timeline", "language", "prose", "narrative"]
+      "enum": ["canon", "character", "timeline", "language", "prose", "narrative", "optional"]
     },
     "type": {
       "type": "string",

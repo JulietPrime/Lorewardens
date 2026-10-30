@@ -83,7 +83,7 @@ test("canon snapshot round-trips and read() returns a defensive copy", async () 
   assert.equal(again.entries.length, snapshot.entries.length + 1, "mutation of a read does not corrupt the store");
 });
 
-test("projects without a settings file default to all agents enabled at descriptor defaults", () => {
+test("projects without a settings file default to descriptor defaults: existing agents enabled, optional agents off", () => {
   const tmp = mkdtempSync(join(tmpdir(), "lore-fixtures-"));
   try {
     const snapshot: CanonSnapshot = {
@@ -97,7 +97,12 @@ test("projects without a settings file default to all agents enabled at descript
     assert.deepEqual(bundle.settings.agents, defaultSettings("bare").agents);
     assert.deepEqual(
       bundle.settings.agents.map((a) => [a.enabled, a.strictness]),
-      AGENT_DESCRIPTORS.map((d) => [true, d.defaultStrictness]),
+      [
+        ...AGENT_DESCRIPTORS.slice(0, 11).map((d) => [true, d.defaultStrictness]),
+        [false, "standard"],
+        [false, "standard"],
+        [false, "standard"],
+      ],
     );
   } finally {
     rmSync(tmp, { recursive: true, force: true });

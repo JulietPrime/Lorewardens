@@ -7,6 +7,7 @@ import {
   CONTINUITY_AGENTS,
   LANGUAGE_AGENTS,
   NARRATIVE_AGENTS,
+  OPTIONAL_AGENTS,
   PACING_TENSION_AGENT,
   PLOT_THREAD_AGENT,
   POV_CONSISTENCY_AGENT,
@@ -104,6 +105,7 @@ test("the three narrative agents are exported behind the same contract", () => {
     ...CONTINUITY_AGENTS.map((a) => a.id),
     ...LANGUAGE_AGENTS.map((a) => a.id),
     ...NARRATIVE_AGENTS.map((a) => a.id),
+    ...OPTIONAL_AGENTS.map((a) => a.id),
   ]);
   for (const agent of NARRATIVE_AGENTS) {
     assert.equal(typeof agent.analyze, "function");

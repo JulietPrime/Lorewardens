@@ -1,0 +1,62 @@
+{
+  "projectId": "proof-light",
+  "entries": [
+    {
+      "id": "canon_motif_lighthouse",
+      "projectId": "proof-light",
+      "kind": "rule",
+      "text": "The lighthouse is lit every night while ships are at sea.",
+      "tags": ["motif"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_motif_storm",
+      "projectId": "proof-light",
+      "kind": "rule",
+      "text": "The storm passes before the festival begins.",
+      "tags": ["motif"],
+      "status": "confirmed",
+      "locked": true,
+      "lockReason": "The storm-before-festival rhythm is the spine of the book; change it only on the writer's word.",
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "canon_rule_paths",
+      "projectId": "proof-light",
+      "kind": "rule",
+      "text": "The villagers of the cove keep the old paths after dark.",
+      "tags": ["paths"],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "characters": [
+    {
+      "id": "char_mira",
+      "projectId": "proof-light",
+      "name": "Mira",
+      "aliases": [],
+      "summary": "A young salvage diver who keeps accounts of everything the harbor owes her.",
+      "traits": ["watchful", "frugal"],
+      "abilities": [],
+      "injuries": [],
+      "goals": ["buy back her family's berth"],
+      "relationships": [],
+      "status": "confirmed",
+      "locked": false,
+      "sources": [],
+      "createdAt": "2026-10-29T09:00:00.000Z",
+      "updatedAt": "2026-10-29T09:00:00.000Z"
+    }
+  ],
+  "events": []
+}

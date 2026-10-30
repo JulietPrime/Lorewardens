@@ -10,6 +10,9 @@ import { createPeriodDialectAgent } from "./period-dialect.js";
 import { createPlotThreadAgent } from "./plot-thread.js";
 import { createPacingTensionAgent } from "./pacing-tension.js";
 import { createPovConsistencyAgent } from "./pov-consistency.js";
+import { createShowVsTellAgent } from "./show-vs-tell.js";
+import { createSensitivityRepresentationAgent } from "./sensitivity-representation.js";
+import { createThemeMotifAgent } from "./theme-motif.js";
 
 export { createCanonLoreAgent, detectCanonContradictions, canonLoreFindings } from "./canon-lore.js";
 export {
@@ -32,6 +35,15 @@ export {
   declaredPovCharacter,
   distanceShift,
 } from "./pov-consistency.js";
+export { showVsTellFindings, EMOTION_LABELS, EXPOSITION_CUES, FILTER_PHRASES } from "./show-vs-tell.js";
+export { sensitivityFindings, STEREOTYPE_PHRASES, REAL_GROUP_TERMS } from "./sensitivity-representation.js";
+export {
+  themeMotifFindings,
+  motifEntries,
+  firstMotifConflict,
+  motifRecurrence,
+  MOTIF_STOPWORDS,
+} from "./theme-motif.js";
 
 export const AGENT_DESCRIPTORS: AgentDescriptor[] = [
   {
@@ -145,6 +157,36 @@ export const AGENT_DESCRIPTORS: AgentDescriptor[] = [
     defaultStrictness: "standard",
     options: [],
   },
+  {
+    id: "show-vs-tell",
+    family: "optional",
+    defaultEnabled: false,
+    title: "Show vs Tell / Craft",
+    description:
+      "Light craft notes on narration only: emotion labels in felt/was constructions, long exposition blocks leaning on stock cues, and filter phrases that distance the reader. Every note is informational with no advice and no rewrites, and quoted dialogue is excluded. Off by default; only the writer can enable it.",
+    defaultStrictness: "standard",
+    options: [],
+  },
+  {
+    id: "sensitivity-representation",
+    family: "optional",
+    defaultEnabled: false,
+    title: "Sensitivity / Representation",
+    description:
+      "Advisory notes on essentialist or dehumanizing phrasing about real groups in narration. Messages describe the observed pattern and never prescribe content; quoted dialogue is excluded, and group terms the writer's fictional world already claims (in canon entries or character names) are respected. Off by default; only the writer can enable it.",
+    defaultStrictness: "standard",
+    options: [],
+  },
+  {
+    id: "theme-motif",
+    family: "optional",
+    defaultEnabled: false,
+    title: "Theme / Motif",
+    description:
+      "Watches the motifs the writer marks as intentional — confirmed canon rules tagged 'motif'. Flags narration that conflicts with a marked motif (locked motifs escalate) and, at strict level, notes when a motif's significant terms recur through the chunk. Fully silent until the writer marks motifs. Off by default; only the writer can enable it.",
+    defaultStrictness: "standard",
+    options: [],
+  },
 ];
 
 function agentById(id: string): AgentDescriptor {
@@ -179,6 +221,14 @@ export const PACING_TENSION_AGENT: ContinuityAgent = createPacingTensionAgent(ag
 
 export const POV_CONSISTENCY_AGENT: ContinuityAgent = createPovConsistencyAgent(agentById("pov-consistency"));
 
+export const SHOW_VS_TELL_AGENT: ContinuityAgent = createShowVsTellAgent(agentById("show-vs-tell"));
+
+export const SENSITIVITY_REPRESENTATION_AGENT: ContinuityAgent = createSensitivityRepresentationAgent(
+  agentById("sensitivity-representation"),
+);
+
+export const THEME_MOTIF_AGENT: ContinuityAgent = createThemeMotifAgent(agentById("theme-motif"));
+
 export const CONTINUITY_AGENTS: ContinuityAgent[] = [
   CANON_LORE_AGENT,
   CHARACTER_CONSISTENCY_AGENT,
@@ -195,4 +245,15 @@ export const LANGUAGE_AGENTS: ContinuityAgent[] = [
 
 export const NARRATIVE_AGENTS: ContinuityAgent[] = [PLOT_THREAD_AGENT, PACING_TENSION_AGENT, POV_CONSISTENCY_AGENT];
 
-export const ALL_AGENTS: ContinuityAgent[] = [...CONTINUITY_AGENTS, ...LANGUAGE_AGENTS, ...NARRATIVE_AGENTS];
+export const OPTIONAL_AGENTS: ContinuityAgent[] = [
+  SHOW_VS_TELL_AGENT,
+  SENSITIVITY_REPRESENTATION_AGENT,
+  THEME_MOTIF_AGENT,
+];
+
+export const ALL_AGENTS: ContinuityAgent[] = [
+  ...CONTINUITY_AGENTS,
+  ...LANGUAGE_AGENTS,
+  ...NARRATIVE_AGENTS,
+  ...OPTIONAL_AGENTS,
+];

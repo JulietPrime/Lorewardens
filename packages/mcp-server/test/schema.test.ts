@@ -93,3 +93,18 @@ test("validator accepts the narrative-roster agents and category (additive)", ()
   const unknownCategory = makeFinding({ ...validDraft(), category: "theme" as unknown as Category });
   assert.ok(validateFinding(unknownCategory).length > 0, "unknown categories are still rejected");
 });
+
+test("validator accepts the optional-roster agents and category (additive)", () => {
+  for (const [agent, category] of [
+    ["show-vs-tell", "optional"],
+    ["sensitivity-representation", "optional"],
+    ["theme-motif", "optional"],
+  ] as const) {
+    const finding = makeFinding({ ...validDraft(), agent, category });
+    assert.deepEqual(validateFinding(finding), [], `${agent}/${category} validates`);
+  }
+  const unknownAgent = makeFinding({ ...validDraft(), agent: "ethics-engine" as ContinuityAgentId });
+  assert.ok(validateFinding(unknownAgent).length > 0, "unknown agents are still rejected");
+  const unknownCategory = makeFinding({ ...validDraft(), category: "sensitivity" as unknown as Category });
+  assert.ok(validateFinding(unknownCategory).length > 0, "unknown categories are still rejected");
+});

@@ -35,7 +35,7 @@ export function defaultSettings(projectId: ProjectId): ProjectSettings {
     projectId,
     agents: AGENT_DESCRIPTORS.map((d) => ({
       agentId: d.id,
-      enabled: true,
+      enabled: d.defaultEnabled ?? true,
       strictness: d.defaultStrictness,
       options: Object.fromEntries((d.options ?? []).map((o) => [o.key, o.default])),
     })),

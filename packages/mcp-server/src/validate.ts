@@ -28,8 +28,11 @@ const AGENT_IDS = new Set([
   "plot-thread",
   "pacing-tension",
   "pov-consistency",
+  "show-vs-tell",
+  "sensitivity-representation",
+  "theme-motif",
 ]);
-const CATEGORIES = new Set(["canon", "character", "timeline", "language", "prose", "narrative"]);
+const CATEGORIES = new Set(["canon", "character", "timeline", "language", "prose", "narrative", "optional"]);
 
 export function validateFinding(finding: unknown): string[] {
   const problems: string[] = [];
