@@ -12,14 +12,17 @@ import {
   sentences,
   type Sentence,
 } from "./lexical.js";
+import { eventDateFindings } from "./event-dates.js";
 
-interface EventRef {
+// EventRef and the mention machinery below are exported for the date/age
+// checks in event-dates.ts, which reuse them unchanged.
+export interface EventRef {
   event: TimelineEvent;
   names: string[];
   keywords: string[];
 }
 
-function buildRefs(context: CanonContext): EventRef[] {
+export function buildRefs(context: CanonContext): EventRef[] {
   const charactersById = new Map(context.characters.map((c) => [c.id, c]));
   const refs: EventRef[] = [];
   for (const event of context.events) {
@@ -38,7 +41,7 @@ function buildRefs(context: CanonContext): EventRef[] {
   return refs;
 }
 
-function keywordRefCount(refs: EventRef[]): Map<string, number> {
+export function keywordRefCount(refs: EventRef[]): Map<string, number> {
   const counts = new Map<string, number>();
   for (const ref of refs) {
     for (const keyword of new Set(ref.keywords)) {
@@ -48,7 +51,7 @@ function keywordRefCount(refs: EventRef[]): Map<string, number> {
   return counts;
 }
 
-function mentionScore(sentence: string, ref: EventRef): number {
+export function mentionScore(sentence: string, ref: EventRef): number {
   let score = mentionsSubject(sentence, ref.names) ? 2 : 0;
   const lower = sentence.toLowerCase();
   for (const keyword of new Set(ref.keywords)) {
@@ -65,12 +68,12 @@ function uniqueKeywordHit(sentence: string, ref: EventRef, counts: Map<string, n
   return false;
 }
 
-function mentionsEvent(sentence: string, ref: EventRef, counts: Map<string, number>): boolean {
+export function mentionsEvent(sentence: string, ref: EventRef, counts: Map<string, number>): boolean {
   const score = mentionScore(sentence, ref);
   return score >= 2 || (score >= 1 && uniqueKeywordHit(sentence, ref, counts));
 }
 
-function firstMentionIndex(sentence: string, ref: EventRef): number {
+export function firstMentionIndex(sentence: string, ref: EventRef): number {
   const byName = firstMatchIndex(sentence, ref.names);
   const byKeyword = firstMatchIndex(sentence, ref.keywords);
   if (byName === -1) return byKeyword;
@@ -167,7 +170,6 @@ export function detectTimelineIssues(chunkText: string, context: CanonContext): 
 export function timelineFindings(chunk: TextChunk, context: CanonContext): Finding[] {
   const findings: Finding[] = [];
   const { contradictions, ambiguities } = detectTimelineIssues(chunk.text, context);
-
   for (const { first, second, assertedFirstPrecedes, sentence } of contradictions) {
     const canonFirstPrecedes = first.event.order < second.event.order;
     if (assertedFirstPrecedes === canonFirstPrecedes) continue;
@@ -221,6 +223,10 @@ export function timelineFindings(chunk: TextChunk, context: CanonContext): Findi
       }),
     );
   }
+
+  // Date and age checks (canon dates + birthDate) run on the same chunk;
+  // they are silent for undated canon, so they add nothing otherwise.
+  findings.push(...eventDateFindings(chunk, context));
 
   return findings;
 }
