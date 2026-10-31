@@ -18,7 +18,7 @@
     "@lorewardens/core": "0.1.0",
     "@lorewardens/agents": "0.1.0",
     "@modelcontextprotocol/sdk": "^1.13.0",
-    "zod": "^3.25.0"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "typescript": "^5.5.4",

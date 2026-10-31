@@ -39,7 +39,7 @@ export const CanonBootstrapInput = z.object({
     ])
     .describe("Exactly one source: pasted text or a local file."),
   generatedAt: z
-    .string()
+    .iso
     .datetime()
     .optional()
     .describe(
