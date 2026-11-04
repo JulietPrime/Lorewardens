@@ -1,4 +1,5 @@
 import { HttpBridgeClient } from "../lib/bridge-client.js";
+import { documentIdFromUrl } from "../lib/docs-url.js";
 import {
   clearLorewardensComments,
   runFullCheck,
@@ -81,12 +82,6 @@ function chromeSessionSnapshots(): SnapshotStore {
       await chrome.storage.session.set({ [key]: value });
     },
   };
-}
-
-function documentIdFromUrl(url: string | undefined): string | null {
-  if (url === undefined) return null;
-  const match = url.match(/\/document\/d\/([a-zA-Z0-9_-]+)/);
-  return match === null ? null : (match[1] as string);
 }
 
 async function handle(request: PanelRequest): Promise<PanelResponse> {
