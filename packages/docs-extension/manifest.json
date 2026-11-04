@@ -6,6 +6,7 @@
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAviixbva8DS4dl4E96vSYruGxKW+HATn2paNGUIqYmAH+Mxa5XM5u2ST3uxpsQvK7MOG+7kcu2fbGx7uIYWEJj0zT7i0vh5Cw1et8xj8FJc9OdXy3cDu5CJoTHS4Cc4F4l9F+Kq1koavaFN5nZlKahhC1qqEwbkj0BLxauo8g5CNdN+/6PwHljrkqdI0o+l7KfqHK0g5u8HLbbJkXy7F6b7tgBlDRR4MM+8hsf96wotmr+zEL31RUEzvpL1x2EnexeAI1819PCnW+Tfjpyv1LDMsVbSHDM1g3+m4d7hVQSNTVfe8w8e2V9LV9tAFvG6euGvA5If/VoPtH/JEOkkR0yQIDAQAB",
   "permissions": ["sidePanel", "storage", "identity", "activeTab", "alarms"],
   "host_permissions": [
+    "https://docs.google.com/*",
     "https://docs.googleapis.com/",
     "https://www.googleapis.com/",
     "http://127.0.0.1:8765/*"

@@ -1,5 +1,7 @@
+import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 import { documentIdFromUrl } from "../src/lib/docs-url.js";
 
 test("documentIdFromUrl: single-account Docs URL yields the document id", () => {
@@ -48,4 +50,14 @@ test("documentIdFromUrl: an empty id yields null (empty id negative)", () => {
 
 test("documentIdFromUrl: undefined yields null", () => {
   assert.equal(documentIdFromUrl(undefined), null);
+});
+
+test("the manifest grants persistent visibility of docs.google.com tabs (host_permissions)", () => {
+  const manifest = JSON.parse(readFileSync(fileURLToPath(new URL("../manifest.json", import.meta.url)), "utf8")) as {
+    host_permissions?: string[];
+  };
+  assert.ok(
+    manifest.host_permissions?.includes("https://docs.google.com/*"),
+    "host permission 'https://docs.google.com/*' is present: tab.url stays visible for Docs tabs without an activeTab grant",
+  );
 });
