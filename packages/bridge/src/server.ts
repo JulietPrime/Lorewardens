@@ -51,12 +51,13 @@ function bearerToken(req: IncomingMessage): string {
   return header.slice("Bearer ".length).trim();
 }
 
-function sendJson(res: ServerResponse, status: number, payload: unknown): void {
+function sendJson(res: ServerResponse, status: number, payload: unknown, extraHeaders: Record<string, string> = {}): void {
   const body = JSON.stringify(payload);
   res.writeHead(status, {
     "content-type": "application/json",
     "cache-control": "no-store",
     "content-length": Buffer.byteLength(body).toString(),
+    ...extraHeaders,
   });
   res.end(body);
 }
@@ -84,17 +85,41 @@ export type BridgeRequestHandler = (req: IncomingMessage, res: ServerResponse) =
 export function createBridgeHandler(options: BridgeServerOptions): BridgeRequestHandler {
   const maxBodyBytes = options.maxBodyBytes ?? DEFAULT_MAX_BODY_BYTES;
   return async function handle(req, res) {
+    // CORS headers for an ALLOWED origin are decided right after the Host and
+    // Origin guards and attached to every response from that point on —
+    // including 401/405/404/500 — so the browser can surface real error bodies
+    // instead of opaque CORS failures. Requests without an Origin header (curl
+    // and other non-browser clients) get no CORS headers at all.
+    let corsHeaders: Record<string, string> = {};
     try {
+      const origin = oneHeader(req.headers.origin);
       if (!isLoopbackHost(oneHeader(req.headers.host))) {
         sendJson(res, 403, { error: "Host header must be 127.0.0.1 or localhost (loopback only)." });
         return;
       }
-      if (!isAllowedOrigin(oneHeader(req.headers.origin), options.allowedExtensionId)) {
+      if (!isAllowedOrigin(origin, options.allowedExtensionId)) {
         sendJson(res, 403, { error: "Origin is not an allowed chrome-extension:// origin." });
         return;
       }
+      if (origin !== undefined) {
+        corsHeaders = { "Access-Control-Allow-Origin": origin };
+      }
+      // CORS preflight: browsers send OPTIONS without an Authorization header
+      // by spec, so the handshake must be answered before the token check.
+      // Answered for any path — browsers preflight per-URL before the route
+      // matters. Fetch runs in the default (no-credentials) mode, so no
+      // Access-Control-Allow-Credentials header is needed or sent.
+      if ((req.method ?? "").toUpperCase() === "OPTIONS" && origin !== undefined) {
+        res.writeHead(204, {
+          ...corsHeaders,
+          "Access-Control-Allow-Headers": "Authorization, Content-Type",
+          "Access-Control-Allow-Methods": "GET, POST",
+        });
+        res.end();
+        return;
+      }
       if (!tokenMatches(bearerToken(req), options.token)) {
-        sendJson(res, 401, { error: "Missing or mismatched bridge token (Authorization: Bearer <token>)." });
+        sendJson(res, 401, { error: "Missing or mismatched bridge token (Authorization: Bearer <token>)." }, corsHeaders);
         return;
       }
 
@@ -103,23 +128,23 @@ export function createBridgeHandler(options: BridgeServerOptions): BridgeRequest
 
       if (path === "/health") {
         if (method !== "GET") {
-          sendJson(res, 405, { error: "Use GET /health." });
+          sendJson(res, 405, { error: "Use GET /health." }, corsHeaders);
           return;
         }
-        sendJson(res, 200, { ok: true, agents: options.registry.list().length });
+        sendJson(res, 200, { ok: true, agents: options.registry.list().length }, corsHeaders);
         return;
       }
 
       if (path === "/analyze") {
         if (method !== "POST") {
-          sendJson(res, 405, { error: "Use POST /analyze." });
+          sendJson(res, 405, { error: "Use POST /analyze." }, corsHeaders);
           return;
         }
         let raw: unknown;
         try {
           raw = JSON.parse(await readBody(req, maxBodyBytes));
         } catch {
-          sendJson(res, 400, { error: "Request body must be valid JSON." });
+          sendJson(res, 400, { error: "Request body must be valid JSON." }, corsHeaders);
           return;
         }
         let request;
@@ -127,50 +152,50 @@ export function createBridgeHandler(options: BridgeServerOptions): BridgeRequest
           request = parseAnalyzeRequest(raw);
         } catch (err) {
           const status = err instanceof BridgeRequestError ? err.status : 400;
-          sendJson(res, status, { error: err instanceof Error ? err.message : "Invalid request." });
+          sendJson(res, status, { error: err instanceof Error ? err.message : "Invalid request." }, corsHeaders);
           return;
         }
         try {
           await options.store.settings(request.projectId);
         } catch (err) {
-          sendJson(res, 404, { error: err instanceof Error ? err.message : `Unknown project '${request.projectId}'.` });
+          sendJson(res, 404, { error: err instanceof Error ? err.message : `Unknown project '${request.projectId}'.` }, corsHeaders);
           return;
         }
         const response = await runBridgeAnalyze(options.registry, options.store, request);
-        sendJson(res, 200, response);
+        sendJson(res, 200, response, corsHeaders);
         return;
       }
 
       if (path.startsWith("/settings/")) {
         if (method !== "GET") {
-          sendJson(res, 405, { error: "Use GET /settings/:projectId." });
+          sendJson(res, 405, { error: "Use GET /settings/:projectId." }, corsHeaders);
           return;
         }
         let projectId: string;
         try {
           projectId = decodeURIComponent(path.slice("/settings/".length));
         } catch {
-          sendJson(res, 400, { error: "Malformed project id encoding." });
+          sendJson(res, 400, { error: "Malformed project id encoding." }, corsHeaders);
           return;
         }
         if (projectId === "") {
-          sendJson(res, 404, { error: "Missing project id." });
+          sendJson(res, 404, { error: "Missing project id." }, corsHeaders);
           return;
         }
         let settings: ProjectSettings;
         try {
           settings = await options.store.settings(projectId);
         } catch (err) {
-          sendJson(res, 404, { error: err instanceof Error ? err.message : `Unknown project '${projectId}'.` });
+          sendJson(res, 404, { error: err instanceof Error ? err.message : `Unknown project '${projectId}'.` }, corsHeaders);
           return;
         }
-        sendJson(res, 200, settings);
+        sendJson(res, 200, settings, corsHeaders);
         return;
       }
 
-      sendJson(res, 404, { error: `No route for ${method} ${path}.` });
+      sendJson(res, 404, { error: `No route for ${method} ${path}.` }, corsHeaders);
     } catch (err) {
-      sendJson(res, 500, { error: err instanceof Error ? err.message : String(err) });
+      sendJson(res, 500, { error: err instanceof Error ? err.message : String(err) }, corsHeaders);
     }
   };
 }

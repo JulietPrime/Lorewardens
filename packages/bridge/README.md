@@ -12,6 +12,12 @@ byte parity, proven by tests.
   `Authorization: Bearer <token>`.
 - **Origin allowlist**: `Origin` must be a `chrome-extension://` origin; when
   `LOREWARDENS_EXTENSION_ID` is set, only that exact extension passes.
+- **CORS for browser clients**: a preflight (`OPTIONS` with an allowed
+  `Origin`) is answered `204` before the token check, echoing the origin and
+  allowing `Authorization` and `Content-Type` headers for `GET`/`POST`; every
+  response to an allowed-origin request — including errors — carries
+  `Access-Control-Allow-Origin`. Requests without an `Origin` header (curl and
+  other non-browser clients) see no CORS headers at all.
 - **No egress**: the server only listens; the package has no outbound HTTP
   client usage (pinned by `test/offline.test.ts`, a mirror of the proof
   package's offline scan — chosen because the proof scan's shared builtin
