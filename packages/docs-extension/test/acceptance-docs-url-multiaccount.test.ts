@@ -220,8 +220,14 @@ test("acceptance: the new docs-url.test.ts covers every row of the 12-row pin ta
 });
 
 test("acceptance: no existing test file was modified by the fix (ac-3)", () => {
-  const modified = gitChangedFiles([DEVELOP_BASE, REVIEWED_REVISION], "M");
-  assert.deepEqual(modified, [], `no file may be modified between base and the reviewed revision, saw: ${modified.join(", ")}`);
+  const modifiedTestFiles = gitChangedFiles([DEVELOP_BASE, REVIEWED_REVISION], "M", "packages").filter((file) =>
+    file.includes("/test/"),
+  );
+  assert.deepEqual(
+    modifiedTestFiles,
+    [],
+    `no existing test file may be modified between base and the reviewed revision, saw: ${modifiedTestFiles.join(", ")}`,
+  );
   const addedTestFiles = gitChangedFiles([DEVELOP_BASE, REVIEWED_REVISION], "A", "packages").filter((file) =>
     file.includes("/test/"),
   );
